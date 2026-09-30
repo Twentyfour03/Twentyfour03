@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #F7F6F3; }
+  * { box-sizing: border-box; }
+  a { color: #2B4B9B; text-decoration: none; }
+  a:hover { color: #16306D; text-decoration: underline; }
+  ::selection { background: #DDE4F5; }
+</style>
+</helmet>
+<div style="min-height:100vh;background:#F7F6F3;color:#16181A;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:13px;-webkit-font-smoothing:antialiased">
+
+  <header style="display:flex;align-items:stretch;justify-content:space-between;height:52px;border-bottom:1px solid #E2E0DA;background:#FFFFFF;position:sticky;top:0;z-index:20">
+    <div style="display:flex;align-items:center;gap:28px;padding-left:20px">
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="width:14px;height:14px;border:1.5px solid #16181A;border-radius:2px;position:relative"><div style="position:absolute;left:3px;top:3px;width:5px;height:5px;background:#2E6B4F"></div></div>
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase">OPTIEDGE</span>
+      </div>
+      <nav style="display:flex;align-items:stretch;gap:0;height:100%">
+        <button onClick="{{ goWorkspace }}" style="{{ tabWorkspace }}">Workspace</button>
+        <button onClick="{{ goRegistry }}" style="{{ tabRegistry }}">Skills</button>
+        <button onClick="{{ goInspector }}" style="{{ tabInspector }}">Run inspector</button>
+      </nav>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;padding-right:20px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095">
+      <span>env <span style="color:#16181A">prod-us-east</span></span>
+      <span style="width:1px;height:16px;background:#E2E0DA"></span>
+      <span>budget <span style="color:#16181A">$412.90 / $600</span></span>
+      <div style="width:24px;height:24px;border-radius:50%;background:#EDEBE5;border:1px solid #E2E0DA;display:flex;align-items:center;justify-content:center;font-size:10px;color:#5C6166">MC</div>
+    </div>
+  </header>
+
+  <sc-if value="{{ isWorkspace }}" hint-placeholder-val="{{ true }}">
+  <div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;height:40px;padding:0 20px;background:#FFFFFF;border-bottom:1px solid #E2E0DA;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166;position:sticky;top:52px;z-index:19">
+      <div style="display:flex;align-items:center;gap:22px;white-space:nowrap;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none">
+        <span style="color:#8A9095">run</span><span style="color:#16181A;margin-left:-14px">r_8f31c40a</span>
+        <span style="width:1px;height:14px;background:#E2E0DA"></span>
+        <span style="color:#8A9095">model</span><span style="color:#16181A;margin-left:-14px">qwen3.8-27b <span style="color:#8A9095">· open-weight · fp8</span></span>
+        <span style="width:1px;height:14px;background:#E2E0DA"></span>
+        <span style="color:#8A9095">tokens</span><span style="color:#16181A;margin-left:-14px">7,412 in / 386 out <span style="color:#2E6B4F">· cache 71%</span></span>
+        <span style="width:1px;height:14px;background:#E2E0DA"></span>
+        <span style="color:#8A9095">cost</span><span style="color:#16181A;margin-left:-14px">$0.0043</span>
+        <span style="width:1px;height:14px;background:#E2E0DA"></span>
+        <span style="color:#8A9095">elapsed</span><span style="color:#16181A;margin-left:-14px">2.84s</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;white-space:nowrap;flex:0 0 auto;padding-left:8px;background:#FFFFFF">
+        <span style="color:#8A9095">verified</span><span style="color:#16181A">{{ verifiedCount }}/12</span>
+        <a href="#" onClick="{{ goInspector }}" style="font-size:11px">inspect run →</a>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);align-items:start">
+
+      <section style="border-right:1px solid #E2E0DA;min-height:calc(100vh - 92px);background:#FFFFFF">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 28px 0">
+          <div>
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.01em">submission_harborline_2026-08-14.eml</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095;margin-top:4px">source · 1 of 1 · 4.1 kB · sha 9c1f…a20e</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095">
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;background:#E4EFE8;border-bottom:1.5px solid #7FA98F"></span>verified span</span>
+            <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;background:#F6EFDD;border-bottom:1.5px solid #C7A85F"></span>weak match</span>
+          </div>
+        </div>
+
+        <div style="padding:22px 28px 60px">
+          <div style="border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+            <div style="padding:14px 18px;background:#FBFAF8;border-bottom:1px solid #E2E0DA;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px;line-height:1.9;color:#5C6166">
+              <div>From&nbsp;&nbsp;&nbsp;&nbsp;m.calderon@harborlinebrokers.com</div>
+              <div>To&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;submissions@meridianspecialty.com</div>
+              <div>Date&nbsp;&nbsp;&nbsp;&nbsp;Fri, 14 Aug 2026 09:12:04 -0400</div>
+              <div style="color:#16181A">Subj&nbsp;&nbsp;&nbsp;&nbsp;New submission — <span onClick="{{ pick.insured_name }}" style="{{ hl.insured_name }}">Bramwell Logistics LLC</span> — property, eff <span onClick="{{ pick.effective_date }}" style="{{ hl.effective_date }}">10/01/2026</span></div>
+            </div>
+            <div style="padding:22px 20px;font-size:14px;line-height:1.85;color:#2A2D30;max-width:62ch">
+              <p style="margin:0 0 14px">Hi team — putting up a new one for your review. Account is <span onClick="{{ pick.insured_name }}" style="{{ hl.insured_name }}">Bramwell Logistics LLC</span>, a third-party warehousing and drayage operation. They're looking for <span onClick="{{ pick.policy_type }}" style="{{ hl.policy_type }}">commercial property</span> coverage only at this stage; we'll come back on auto separately.</p>
+              <p style="margin:0 0 14px">Primary location is <span onClick="{{ pick.primary_location }}" style="{{ hl.primary_location }}">1420 Dockside Road, Savannah, GA 31408</span> — single building, <span onClick="{{ pick.year_built }}" style="{{ hl.year_built }}">built in 1994</span>, <span onClick="{{ pick.construction_type }}" style="{{ hl.construction_type }}">masonry walls with a wood joist roof deck</span>. Total insured value across building, contents and stock comes to <span onClick="{{ pick.total_insured_value }}" style="{{ hl.total_insured_value }}">$14,250,000</span>.</p>
+              <p style="margin:0 0 14px">Requested effective date is <span onClick="{{ pick.effective_date }}" style="{{ hl.effective_date }}">October 1, 2026</span>. I've attached <span onClick="{{ pick.loss_run_years }}" style="{{ hl.loss_run_years }}">three years of loss runs</span> — one water damage claim in 2024, closed at $38k, nothing else of note.</p>
+              <p style="margin:0 0 14px">The risk manager mentioned they upgraded the <span onClick="{{ pick.sprinkler_status }}" style="{{ hl.sprinkler_status }}">fire protection system last spring</span> but I don't have the certificate in hand yet. Deductible target is <span onClick="{{ pick.deductible }}" style="{{ hl.deductible }}">$25,000</span> per occurrence.</p>
+              <p style="margin:0 0 14px">Let me know what else you need. Quick turnaround appreciated — they're shopping it.</p>
+              <p style="margin:0;color:#5C6166">Marisol Calderón<br />Harborline Brokers · Producer #GA-118420</p>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px dashed #C3CBE4;background:#F4F6FC;border-radius:3px">
+            <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:600;letter-spacing:0.06em;color:#3A4E8C;padding-top:1px">NO SPAN</span>
+            <span style="font-size:12.5px;color:#3F4756;line-height:1.6">{{ abstainedCount }} fields have no supporting span in this source. The model abstained rather than guessing; they're queued for you on the right.</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="min-height:calc(100vh - 92px)">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;padding:20px 24px 0">
+          <div>
+            <div style="font-size:14px;font-weight:600;letter-spacing:-0.01em">submission_intake · v4</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095;margin-top:4px">skill · 12 fields · strict schema · constrained decode</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button onClick="{{ noop }}" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166;background:#FFFFFF;border:1px solid #E2E0DA;border-radius:3px;padding:6px 10px;cursor:pointer" style-hover="border-color:#C9C6BE;color:#16181A">re-run</button>
+            <button onClick="{{ noop }}" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#FFFFFF;background:#16181A;border:1px solid #16181A;border-radius:3px;padding:6px 12px;cursor:pointer" style-hover="background:#2A2D30">accept {{ verifiedCount }}</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;margin:18px 24px 0;background:#E2E0DA;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+          <div style="background:#FFFFFF;padding:11px 14px">
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">verified</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;color:#2E6B4F;margin-top:3px">{{ verifiedCount }}</div>
+          </div>
+          <div style="background:#FFFFFF;padding:11px 14px">
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">unverified</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;color:#8A6D2F;margin-top:3px">{{ unverifiedCount }}</div>
+          </div>
+          <div style="background:#FFFFFF;padding:11px 14px">
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">abstained</div>
+            <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;color:#3A4E8C;margin-top:3px">{{ abstainedCount }}</div>
+          </div>
+        </div>
+
+        <div style="padding:18px 24px 60px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 12px 8px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase;border-bottom:1px solid #E2E0DA">
+            <span>field · value</span><span>confidence · verification</span>
+          </div>
+
+          <sc-for list="{{ fields }}" as="f" hint-placeholder-count="6">
+            <div onClick="{{ f.onSelect }}" style="{{ f.rowStyle }}">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <div style="display:flex;align-items:baseline;gap:8px;min-width:0">
+                  <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#16181A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ f.key }}</span>
+                  <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;color:#A5AAAE;white-space:nowrap">{{ f.type }}</span>
+                </div>
+                <div style="flex:0 0 auto">
+                  <sc-if value="{{ f.isVerified }}" hint-placeholder-val="{{ true }}">
+                    <span style="display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;color:#2E6B4F;background:#E8F0EA;border:1px solid #CBDFD2;border-radius:2px;padding:3px 7px;white-space:nowrap">✓ verified</span>
+                  </sc-if>
+                  <sc-if value="{{ f.isUnverified }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;color:#8A6D2F;background:#F7F1E2;border:1px solid #E4D6B4;border-radius:2px;padding:3px 7px;white-space:nowrap">~ unverified</span>
+                  </sc-if>
+                  <sc-if value="{{ f.isAbstained }}" hint-placeholder-val="{{ false }}">
+                    <span style="display:inline-flex;align-items:center;gap:5px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;font-weight:500;color:#3A4E8C;background:#EDF0F9;border:1px dashed #A9B4D8;border-radius:2px;padding:3px 7px;white-space:nowrap">? needs you</span>
+                  </sc-if>
+                </div>
+              </div>
+
+              <div style="display:flex;align-items:center;gap:14px;margin-top:7px">
+                <div style="flex:1;min-width:0">
+                  <sc-if value="{{ f.isAbstained }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <input value="{{ f.draft }}" onChange="{{ f.onEdit }}" placeholder="{{ f.prompt }}" style="flex:1;min-width:0;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12.5px;color:#16181A;background:#F4F6FC;border:1px dashed #A9B4D8;border-radius:3px;padding:7px 9px;outline:none" style-focus="border-color:#3A4E8C;border-style:solid;background:#FFFFFF" />
+                      <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;color:#8A9095;white-space:nowrap">{{ f.source }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ f.isPresent }}" hint-placeholder-val="{{ true }}">
+                    <input value="{{ f.draft }}" onChange="{{ f.onEdit }}" style="width:100%;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12.5px;color:#16181A;background:transparent;border:1px solid transparent;border-radius:3px;padding:6px 8px;margin-left:-8px;outline:none" style-hover="border-color:#E2E0DA;background:#FFFFFF" style-focus="border-color:#16181A;background:#FFFFFF" />
+                  </sc-if>
+                </div>
+
+                <div style="flex:0 0 auto">
+                  <sc-if value="{{ f.isPresent }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:7px">
+                      <div style="width:38px;height:4px;background:#EDEBE5;border-radius:2px;overflow:hidden"><div style="{{ f.barStyle }}"></div></div>
+                      <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166">{{ f.confText }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ f.isAbstained }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#A5AAAE">conf null</span>
+                  </sc-if>
+                </div>
+              </div>
+
+              <sc-if value="{{ f.showNote }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top:9px;font-size:12px;line-height:1.6;color:#5C6166;max-width:56ch">{{ f.note }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+    </div>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isRegistry }}" hint-placeholder-val="{{ false }}">
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 400px;align-items:start">
+    <section style="border-right:1px solid #E2E0DA;min-height:calc(100vh - 52px);padding:24px 24px 60px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div>
+          <div style="font-size:15px;font-weight:600;letter-spacing:-0.01em">Skill registry</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095;margin-top:4px">6 skills · 4 task types · 3 models bound</div>
+        </div>
+        <button onClick="{{ noop }}" style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166;background:#FFFFFF;border:1px solid #E2E0DA;border-radius:3px;padding:6px 11px;cursor:pointer" style-hover="border-color:#C9C6BE;color:#16181A">+ new skill</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;margin-top:18px;background:#E2E0DA;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+        <div style="background:#FFFFFF;padding:12px 14px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">spend · 30d</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;margin-top:3px">$412.9038</div>
+        </div>
+        <div style="background:#FFFFFF;padding:12px 14px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">runs · 30d</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;margin-top:3px">94,210</div>
+        </div>
+        <div style="background:#FFFFFF;padding:12px 14px">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">verified rate</div>
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:17px;margin-top:3px;color:#2E6B4F">96.2%</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:20px">
+        <sc-for list="{{ skills }}" as="s" hint-placeholder-count="6">
+          <div onClick="{{ s.onSelect }}" style="{{ s.cardStyle }}">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px">
+              <div style="min-width:0">
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12.5px;font-weight:500;color:#16181A">{{ s.name }}</div>
+                <div style="font-size:12px;color:#8A9095;margin-top:3px">{{ s.desc }}</div>
+              </div>
+              <span style="{{ s.typeStyle }}">{{ s.type }}</span>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:7px;margin-top:14px;padding-top:12px;border-top:1px solid #EDEBE5;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166">
+              <span style="color:#8A9095">model</span>
+              <span style="color:#16181A">{{ s.model }}</span>
+              <span style="{{ s.weightStyle }}">{{ s.weights }}</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px">
+              <div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;letter-spacing:0.05em;color:#A5AAAE;text-transform:uppercase">eval acc</div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:13px;margin-top:2px;color:#16181A">{{ s.acc }}</div>
+              </div>
+              <div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;letter-spacing:0.05em;color:#A5AAAE;text-transform:uppercase">$/run</div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:13px;margin-top:2px;color:#16181A">{{ s.cost }}</div>
+              </div>
+              <div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;letter-spacing:0.05em;color:#A5AAAE;text-transform:uppercase">abstain</div>
+                <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:13px;margin-top:2px;color:#5C6166">{{ s.abstain }}</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <aside style="position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;background:#FFFFFF;padding:24px 22px 60px">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">skill detail</div>
+      <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:14px;font-weight:500;margin-top:8px">{{ detail.name }}</div>
+      <div style="font-size:12.5px;color:#5C6166;line-height:1.6;margin-top:6px">{{ detail.desc }}</div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:16px;padding:12px 0;border-top:1px solid #EDEBE5;border-bottom:1px solid #EDEBE5;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px">
+        <span style="color:#8A9095">bound <span style="color:#16181A">{{ detail.model }}</span></span>
+        <span style="color:#8A9095">acc <span style="color:#16181A">{{ detail.acc }}</span></span>
+        <span style="color:#8A9095">$/run <span style="color:#16181A">{{ detail.cost }}</span></span>
+      </div>
+
+      <div style="margin-top:20px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between">
+          <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">verified rate · 12 weeks</div>
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#2E6B4F">{{ detail.trend }}</span>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:5px;height:62px;margin-top:12px;padding-bottom:1px;border-bottom:1px solid #E2E0DA">
+          <sc-for list="{{ detail.history }}" as="h" hint-placeholder-count="12">
+            <div style="{{ h.barStyle }}" title="{{ h.label }}"></div>
+          </sc-for>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;color:#A5AAAE">
+          <span>w22</span><span style="color:#8A9095">model swap w28</span><span>w33</span>
+        </div>
+      </div>
+
+      <div style="margin-top:24px">
+        <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">output schema</div>
+        <pre style="margin:10px 0 0;padding:14px;background:#FBFAF8;border:1px solid #E2E0DA;border-radius:3px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;line-height:1.75;color:#2A2D30;white-space:pre-wrap;overflow-x:auto">{{ detail.schema }}</pre>
+      </div>
+
+      <div style="margin-top:24px">
+        <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">example inputs</div>
+        <div style="display:flex;flex-direction:column;gap:1px;margin-top:10px;background:#E2E0DA;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+          <sc-for list="{{ detail.examples }}" as="e" hint-placeholder-count="3">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;background:#FFFFFF;padding:10px 12px">
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#16181A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ e.name }}</span>
+              <span style="{{ e.badgeStyle }}">{{ e.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </aside>
+  </div>
+  </sc-if>
+
+  <sc-if value="{{ isInspector }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1080px;margin:0 auto;padding:26px 24px 80px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px">
+      <div>
+        <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095">run · r_8f31c40a · submission_intake v4</div>
+        <div style="font-size:16px;font-weight:600;letter-spacing:-0.01em;margin-top:6px">Escalated to qwen3.8-27b after one failed verification</div>
+      </div>
+      <div style="display:flex;gap:22px;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;text-align:right">
+        <div><div style="color:#8A9095">total cost</div><div style="font-size:14px;margin-top:2px">$0.0043</div></div>
+        <div><div style="color:#8A9095">wall time</div><div style="font-size:14px;margin-top:2px">2.84s</div></div>
+        <div><div style="color:#8A9095">outcome</div><div style="font-size:14px;margin-top:2px;color:#2E6B4F">passed</div></div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px">
+      <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">techniques applied · extraction</div>
+      <div style="display:flex;flex-direction:column;gap:1px;margin-top:10px;background:#E2E0DA;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+        <sc-for list="{{ steps }}" as="t" hint-placeholder-count="6">
+          <div style="{{ t.rowStyle }}">
+            <div style="display:grid;grid-template-columns:26px 210px minmax(0,1fr) 130px 82px;gap:14px;align-items:center">
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#A5AAAE">{{ t.num }}</span>
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#16181A">{{ t.name }}</span>
+              <span style="font-size:12.5px;color:#5C6166;line-height:1.5">{{ t.detail }}</span>
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#5C6166">{{ t.model }}</span>
+              <span style="{{ t.badgeStyle }}">{{ t.status }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;margin-top:26px;align-items:start">
+      <div>
+        <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">verification per field</div>
+        <div style="display:flex;flex-direction:column;gap:1px;margin-top:10px;background:#E2E0DA;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden">
+          <sc-for list="{{ checks }}" as="c" hint-placeholder-count="6">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 76px 96px;gap:10px;align-items:center;background:#FFFFFF;padding:9px 12px">
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px;color:#16181A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ c.key }}</span>
+              <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095">{{ c.method }}</span>
+              <span style="{{ c.badgeStyle }}">{{ c.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.06em;color:#8A9095;text-transform:uppercase">tokens &amp; cost by stage</div>
+        <div style="margin-top:10px;border:1px solid #E2E0DA;border-radius:3px;overflow:hidden;background:#FFFFFF">
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 74px 58px 64px 78px;gap:8px;padding:9px 12px;background:#FBFAF8;border-bottom:1px solid #E2E0DA;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10px;letter-spacing:0.05em;color:#8A9095;text-transform:uppercase">
+            <span>stage</span><span style="text-align:right">in</span><span style="text-align:right">out</span><span style="text-align:right">cache</span><span style="text-align:right">cost</span>
+          </div>
+          <sc-for list="{{ stages }}" as="g" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:minmax(0,1fr) 74px 58px 64px 78px;gap:8px;padding:9px 12px;border-bottom:1px solid #EDEBE5;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px">
+              <span style="color:#16181A;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ g.name }}</span>
+              <span style="text-align:right;color:#5C6166">{{ g.tin }}</span>
+              <span style="text-align:right;color:#5C6166">{{ g.tout }}</span>
+              <span style="{{ g.cacheStyle }}">{{ g.cache }}</span>
+              <span style="text-align:right;color:#16181A">{{ g.cost }}</span>
+            </div>
+          </sc-for>
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 74px 58px 64px 78px;gap:8px;padding:10px 12px;background:#FBFAF8;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px;font-weight:600">
+            <span>total</span><span style="text-align:right">7,412</span><span style="text-align:right">386</span><span style="text-align:right;color:#2E6B4F;font-weight:400">71%</span><span style="text-align:right">$0.0043</span>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11.5px;color:#8A9095;line-height:1.6">Cache hit on the schema and few-shot prefix; the escalation re-sent the full prompt cold, which is where $0.0026 of this run went.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:26px;border:1px solid #E2E0DA;border-radius:3px;background:#FFFFFF;overflow:hidden">
+      <button onClick="{{ toggleTrace }}" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;background:#FFFFFF;border:0;cursor:pointer;text-align:left;font-family:'IBM Plex Sans',sans-serif" style-hover="background:#FBFAF8">
+        <span style="display:flex;align-items:center;gap:10px">
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#8A9095">{{ traceCaret }}</span>
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:12px;color:#16181A">reasoning trace</span>
+          <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:10.5px;color:#8A9095">386 tokens · 2 passes</span>
+        </span>
+        <span style="font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;color:#2B4B9B">{{ traceAction }}</span>
+      </button>
+      <sc-if value="{{ traceOpen }}" hint-placeholder-val="{{ false }}">
+        <pre style="margin:0;padding:16px;border-top:1px solid #E2E0DA;background:#FBFAF8;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11.5px;line-height:1.8;color:#2A2D30;white-space:pre-wrap">{{ trace }}</pre>
+      </sc-if>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Field table&quot;},&quot;showConfidenceBars&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Field table&quot;},&quot;expandTrace&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Run inspector&quot;}}">
+const MONO = "'IBM Plex Mono',ui-monospace,monospace";
+
+const FIELDS = [
+  { key: 'insured_name', type: 'string', value: 'Bramwell Logistics LLC', conf: 0.98, state: 'verified', span: 'insured_name' },
+  { key: 'policy_type', type: 'enum', value: 'commercial_property', conf: 0.95, state: 'verified', span: 'policy_type' },
+  { key: 'effective_date', type: 'date', value: '2026-10-01', conf: 0.97, state: 'verified', span: 'effective_date' },
+  { key: 'primary_location', type: 'address', value: '1420 Dockside Rd, Savannah, GA 31408', conf: 0.93, state: 'verified', span: 'primary_location' },
+  { key: 'total_insured_value', type: 'currency', value: '14250000.00', conf: 0.96, state: 'verified', span: 'total_insured_value' },
+  { key: 'deductible', type: 'currency', value: '25000.00', conf: 0.94, state: 'verified', span: 'deductible' },
+  { key: 'year_built', type: 'integer', value: '1994', conf: 0.92, state: 'verified', span: 'year_built' },
+  { key: 'loss_run_years', type: 'integer', value: '3', conf: 0.88, state: 'verified', span: 'loss_run_years' },
+  { key: 'construction_type', type: 'enum', value: 'joisted_masonry', conf: 0.61, state: 'unverified', span: 'construction_type',
+    note: 'Inferred from "masonry walls with a wood joist roof deck". The literal enum value never appears in the source, so the grounding check could not confirm it.' },
+  { key: 'sprinkler_status', type: 'enum', value: 'upgraded_unconfirmed', conf: 0.54, state: 'unverified', span: 'sprinkler_status',
+    note: 'Source says the system was upgraded but no certificate is attached. Value is a paraphrase, not a quote.' },
+  { key: 'prior_carrier', type: 'string', value: null, conf: null, state: 'abstained', prompt: 'not stated in source — enter carrier',
+    note: 'The model returned null rather than guess. Two candidate carriers appear in the attached loss runs; neither is identified as the incumbent.' },
+  { key: 'broker_commission_pct', type: 'decimal', value: null, conf: null, state: 'abstained', prompt: 'not stated — enter % or leave blank' }
+];
+
+const SKILLS = [
+  { id: 'submission_intake', name: 'submission_intake · v4', desc: 'Property submission emails → bound schema', type: 'extraction', model: 'qwen3.8-27b', weights: 'open', acc: '96.2%', cost: '$0.0043', abstain: '4.1%',
+    trend: '+2.4 pts', schema: '{\n  insured_name:        string   (req)\n  policy_type:         enum[6]  (req)\n  effective_date:      date     (req)\n  primary_location:    address  (req)\n  total_insured_value: currency (req)\n  deductible:          currency\n  year_built:          integer\n  loss_run_years:      integer\n  construction_type:   enum[9]\n  sprinkler_status:    enum[4]\n  prior_carrier:       string   (nullable)\n  broker_commission:   decimal  (nullable)\n}',
+    examples: [['submission_harborline_2026-08-14.eml', 'verified'], ['submission_pactrans_q3.eml', 'verified'], ['renewal_delmar_holdings.eml', '2 abstained'], ['submission_scan_lowres.pdf', 'failed']],
+    history: [88, 89, 91, 90, 92, 91, 84, 93, 94, 95, 96, 96] },
+  { id: 'clause_qa', name: 'clause_qa · v2', desc: 'Answers policy questions with cited spans', type: 'grounded QA', model: 'glm-5.2', weights: 'open', acc: '91.7%', cost: '$0.0112', abstain: '9.3%',
+    trend: '+0.8 pts', schema: '{\n  answer:   string  (req)\n  citations: span[]  (req, min 1)\n  abstained: boolean\n}',
+    examples: [['endorsement_pack_2026.pdf', 'verified'], ['wc_manual_ga.pdf', '1 abstained']],
+    history: [86, 87, 87, 88, 89, 88, 90, 90, 91, 91, 92, 92] },
+  { id: 'loss_run_sql', name: 'loss_run_sql · v7', desc: 'Natural language → validated Snowflake SQL', type: 'SQL', model: 'qwen3-coder-30b', weights: 'open', acc: '94.0%', cost: '$0.0067', abstain: '2.2%',
+    trend: '+5.1 pts', schema: '{\n  sql:        string (req, parsed + EXPLAINed)\n  tables:     string[]\n  row_estimate: integer\n}',
+    examples: [['claims by peril, 3y', 'verified'], ['open reserves > 100k', 'verified'], ['loss ratio by producer', 'repaired']],
+    history: [82, 84, 85, 86, 88, 89, 90, 91, 92, 93, 94, 94] },
+  { id: 'peril_classifier', name: 'peril_classifier · v3', desc: 'Claim narrative → cause-of-loss code', type: 'classification', model: 'deepseek-v4-flash', weights: 'open', acc: '97.4%', cost: '$0.0008', abstain: '1.0%',
+    trend: '+0.3 pts', schema: '{\n  peril_code: enum[24] (req)\n  confidence: float\n}',
+    examples: [['fnol_batch_aug.csv', 'verified'], ['fnol_backfill_2024.csv', 'verified']],
+    history: [95, 95, 96, 96, 96, 97, 97, 97, 97, 97, 97, 97] },
+  { id: 'cert_extract', name: 'cert_extract · v1', desc: 'Certificates of insurance → limits table', type: 'extraction', model: 'deepseek-v4-flash', weights: 'open', acc: '89.1%', cost: '$0.0011', abstain: '12.6%',
+    trend: '−1.2 pts', schema: '{\n  limits:     row[]   (req)\n  expiry:     date\n  additional_insured: string[]\n}',
+    examples: [['coi_bramwell.pdf', '3 abstained'], ['coi_scan_fax.pdf', 'failed']],
+    history: [91, 90, 90, 89, 88, 89, 88, 87, 88, 89, 89, 89] },
+  { id: 'endorsement_diff', name: 'endorsement_diff · v2', desc: 'Renewal vs expiring — flags material changes', type: 'grounded QA', model: 'glm-5.2', weights: 'open', acc: '92.8%', cost: '$0.0184', abstain: '6.7%',
+    trend: '+1.6 pts', schema: '{\n  changes:  row[]  (req)\n  material: boolean\n  citations: span[] (req)\n}',
+    examples: [['delmar_renewal_vs_2025.pdf', 'verified'], ['pactrans_renewal.pdf', 'verified']],
+    history: [89, 89, 90, 90, 91, 91, 92, 91, 92, 93, 93, 93] }
+];
+
+const STEPS = [
+  { num: '01', name: 'schema compile', detail: 'Bound 12-field schema → grammar; enums closed, dates ISO-8601', model: '—', status: 'ok' },
+  { num: '02', name: 'few-shot select', detail: '4 exemplars retrieved from the eval set by document-shape similarity', model: '—', status: 'ok' },
+  { num: '03', name: 'constrained decode', detail: 'Grammar-constrained generation, no free-form output path', model: 'deepseek-v4-flash', status: 'ok' },
+  { num: '04', name: 'source-grounding check', detail: 'total_insured_value quoted a figure absent from the source', model: '—', status: 'fail' },
+  { num: '05', name: 'escalation', detail: 'Failed grounding on a required field → re-ran on the larger model', model: 'qwen3.8-27b', status: 'escalated' },
+  { num: '06', name: 'repair loop', detail: '1 pass · re-grounded 12/12 fields, 2 downgraded to unverified, 2 abstained', model: 'qwen3.8-27b', status: 'ok' }
+];
+
+const CHECKS = [
+  ['insured_name', 'exact span', 'verified'], ['policy_type', 'alias map', 'verified'],
+  ['effective_date', 'normalized', 'verified'], ['primary_location', 'exact span', 'verified'],
+  ['total_insured_value', 're-grounded', 'verified'], ['deductible', 'exact span', 'verified'],
+  ['year_built', 'exact span', 'verified'], ['loss_run_years', 'numeral map', 'verified'],
+  ['construction_type', 'paraphrase', 'unverified'], ['sprinkler_status', 'paraphrase', 'unverified'],
+  ['prior_carrier', 'no span', 'abstained'], ['broker_commission_pct', 'no span', 'abstained']
+];
+
+const STAGES = [
+  ['schema + few-shot prefix', '5,204', '—', 'hit', '$0.0004'],
+  ['decode · deepseek-v4-flash', '1,046', '241', 'hit', '$0.0006'],
+  ['grounding check', '412', '18', 'miss', '$0.0002'],
+  ['escalation · qwen3.8-27b', '6,366', '104', 'cold', '$0.0026'],
+  ['repair pass', '0', '23', 'hit', '$0.0005']
+];
+
+const TRACE = 'pass 1 · deepseek-v4-flash\n  → 12 fields requested, grammar-constrained\n  → total_insured_value: read "$14,250,000" in body; emitted 14250000.00\n  ✗ grounding: emitted string "$14,250,000.00" not found verbatim; normalizer disagreed\n  → escalate (required field, grounding fail)\n\npass 2 · qwen3.8-27b\n  → re-read paragraph 2; TIV stated once, across "building, contents and stock"\n  → emit 14250000.00, span [para 2, ch 214–225] ✓\n  → construction_type: source describes materials, not a class.\n    "masonry walls with a wood joist roof deck" maps to joisted_masonry (ISO 4)\n    no literal span → mark unverified, do not claim verification\n  → sprinkler_status: upgrade asserted, no certificate → unverified\n  → prior_carrier: two carriers appear in attachments, incumbent not identified.\n    abstain rather than pick. flag for human.\n  → broker_commission_pct: absent. abstain.\n  ✓ 8 verified · 2 unverified · 2 abstained';
+
+const badge = (state) => {
+  const base = 'display:inline-flex;align-items:center;justify-content:center;font-family:' + MONO + ';font-size:10.5px;font-weight:500;border-radius:2px;padding:3px 7px;white-space:nowrap;';
+  if (state === 'verified' || state === 'ok') return base + 'color:#2E6B4F;background:#E8F0EA;border:1px solid #CBDFD2';
+  if (state === 'unverified' || state === 'repaired') return base + 'color:#8A6D2F;background:#F7F1E2;border:1px solid #E4D6B4';
+  if (state === 'abstained' || state === 'escalated') return base + 'color:#3A4E8C;background:#EDF0F9;border:1px dashed #A9B4D8';
+  if (state === 'fail' || state === 'failed') return base + 'color:#8E3B34;background:#F6E9E7;border:1px solid #E2C6C2';
+  return base + 'color:#5C6166;background:#F2F1EC;border:1px solid #E2E0DA';
+};
+
+class Component extends DCLogic {
+  state = { screen: 'workspace', sel: 'total_insured_value', edits: {}, skill: 'submission_intake', traceOpen: null };
+
+  renderVals() {
+    const st = this.state;
+    const compact = (this.props.density ?? 'default') === 'compact';
+    const showBars = this.props.showConfidenceBars ?? true;
+    const traceOpen = st.traceOpen === null ? (this.props.expandTrace ?? false) : st.traceOpen;
+    const pad = compact ? '9px 12px' : '13px 12px';
+
+    const tab = (k) => 'font-family:' + MONO + ';font-size:11.5px;letter-spacing:0.02em;background:transparent;border:0;border-bottom:2px solid ' +
+      (st.screen === k ? '#16181A' : 'transparent') + ';color:' + (st.screen === k ? '#16181A' : '#8A9095') +
+      ';padding:0 4px;margin-top:2px;cursor:pointer;height:100%';
+
+    const fields = FIELDS.map((f) => {
+      const abst = f.state === 'abstained';
+      const selected = st.sel === f.key;
+      const draft = st.edits[f.key] ?? (f.value || '');
+      return {
+        key: f.key, type: f.type, draft, prompt: f.prompt || '', note: f.note || '',
+        showNote: selected && !!f.note,
+        source: abst ? 'no span' : '',
+        isAbstained: abst, isPresent: !abst,
+        isVerified: f.state === 'verified', isUnverified: f.state === 'unverified',
+        confText: f.conf ? f.conf.toFixed(2) : '—',
+        barStyle: 'height:100%;width:' + Math.round((f.conf || 0) * 100) + '%;background:' +
+          (f.conf >= 0.85 ? '#7FA98F' : '#C7A85F') + ';display:' + (showBars ? 'block' : 'none'),
+        rowStyle: 'padding:' + pad + ';border-bottom:1px solid #EDEBE5;cursor:pointer;border-left:2px solid ' +
+          (selected ? '#16181A' : 'transparent') + ';background:' + (selected ? '#FFFFFF' : 'transparent'),
+        onSelect: () => this.setState({ sel: f.key }),
+        onEdit: (e) => this.setState({ edits: Object.assign({}, this.state.edits, { [f.key]: e.target.value }) })
+      };
+    });
+
+    const hl = {}; const pick = {};
+    FIELDS.forEach((f) => {
+      if (!f.span) return;
+      const weak = f.state === 'unverified';
+      const active = st.sel === f.key;
+      hl[f.span] = 'cursor:pointer;border-radius:2px;padding:0 1px;background:' +
+        (weak ? (active ? '#EFE0B8' : '#F6EFDD') : (active ? '#CFE3D6' : '#E4EFE8')) +
+        ';border-bottom:1.5px solid ' + (weak ? '#C7A85F' : '#7FA98F') +
+        (active ? ';box-shadow:0 0 0 1px ' + (weak ? '#C7A85F' : '#7FA98F') : '');
+      pick[f.span] = () => this.setState({ sel: f.key });
+    });
+
+    const skills = SKILLS.map((s) => ({
+      name: s.name, desc: s.desc, type: s.type, model: s.model, weights: s.weights,
+      acc: s.acc, cost: s.cost, abstain: s.abstain,
+      cardStyle: 'padding:15px 16px;background:#FFFFFF;border:1px solid ' + (st.skill === s.id ? '#16181A' : '#E2E0DA') +
+        ';border-radius:3px;cursor:pointer',
+      typeStyle: 'font-family:' + MONO + ';font-size:10px;letter-spacing:0.04em;color:#5C6166;background:#F2F1EC;border:1px solid #E2E0DA;border-radius:2px;padding:3px 6px;white-space:nowrap',
+      weightStyle: 'font-family:' + MONO + ';font-size:9.5px;letter-spacing:0.05em;text-transform:uppercase;color:#2E6B4F;border:1px solid #CBDFD2;background:#E8F0EA;border-radius:2px;padding:1px 4px',
+      onSelect: () => this.setState({ skill: s.id })
+    }));
+
+    const d = SKILLS.find((s) => s.id === st.skill) || SKILLS[0];
+    const max = Math.max.apply(null, d.history);
+    const detail = {
+      name: d.name, desc: d.desc, model: d.model, acc: d.acc, cost: d.cost, trend: d.trend, schema: d.schema,
+      history: d.history.map((v, i) => ({
+        label: v + '%',
+        barStyle: 'flex:1;min-width:4px;height:' + Math.round((v / max) * 100) + '%;background:' +
+          (i === d.history.length - 1 ? '#2E6B4F' : '#C6D8CC') + ';border-radius:1px 1px 0 0'
+      })),
+      examples: d.examples.map(([name, status]) => ({ name, status, badgeStyle: badge(status.indexOf('abstained') > -1 ? 'abstained' : status) }))
+    };
+
+    return {
+      isWorkspace: st.screen === 'workspace', isRegistry: st.screen === 'registry', isInspector: st.screen === 'inspector',
+      tabWorkspace: tab('workspace'), tabRegistry: tab('registry'), tabInspector: tab('inspector'),
+      goWorkspace: () => this.setState({ screen: 'workspace' }),
+      goRegistry: () => this.setState({ screen: 'registry' }),
+      goInspector: () => this.setState({ screen: 'inspector' }),
+      noop: () => {},
+      fields, hl, pick, skills, detail,
+      verifiedCount: FIELDS.filter((f) => f.state === 'verified').length,
+      unverifiedCount: FIELDS.filter((f) => f.state === 'unverified').length,
+      abstainedCount: FIELDS.filter((f) => f.state === 'abstained').length,
+      steps: STEPS.map((t) => ({
+        num: t.num, name: t.name, detail: t.detail, model: t.model, status: t.status,
+        badgeStyle: badge(t.status),
+        rowStyle: 'background:' + (t.status === 'escalated' ? '#F8F9FD' : '#FFFFFF') + ';padding:12px 14px'
+      })),
+      checks: CHECKS.map(([key, method, status]) => ({ key, method, status, badgeStyle: badge(status) })),
+      stages: STAGES.map(([name, tin, tout, cache, cost]) => ({
+        name, tin, tout, cache, cost,
+        cacheStyle: 'text-align:right;color:' + (cache === 'hit' ? '#2E6B4F' : cache === 'cold' ? '#8A6D2F' : '#A5AAAE')
+      })),
+      trace: TRACE, traceOpen,
+      traceCaret: traceOpen ? '▾' : '▸',
+      traceAction: traceOpen ? 'collapse' : 'expand',
+      toggleTrace: () => this.setState({ traceOpen: !traceOpen })
+    };
+  }
+}
+</script>
+</body>
+</html>

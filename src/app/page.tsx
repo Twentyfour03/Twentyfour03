@@ -1,69 +1,247 @@
-import Image from "next/image";
+import type React from "react";
+import Link from "next/link";
 
-export default function Home() {
+import { Press } from "@/components/motion/press";
+import { shopCategories } from "@/lib/content";
+import {
+  getCoreServices,
+  getPageCopy,
+  getProcess,
+  getProcurementCategories,
+  getSiteSettings,
+  getTestimonials,
+} from "@/lib/data";
+
+const marqueeLine =
+  "QUOTE FIRST // NOTHING IS BOUGHT BEFORE YOU APPROVE // CHINA · UAE · UK · EUROPE · GHANA // ";
+
+export default async function Home() {
+  const [coreServices, process, productCategories, site, copy, testimonials] = await Promise.all([
+    getCoreServices(),
+    getProcess(),
+    getProcurementCategories(),
+    getSiteSettings(),
+    getPageCopy(),
+    getTestimonials(),
+  ]);
+  const rail = [
+    ...shopCategories.map((c) => ({ title: c.title, href: `/shop?category=${c.slug}` })),
+    { title: productCategories[1]?.title ?? "Sourced to order", href: "/contact" },
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <>
+      {/* Hero: a sheet of cream leather, stitched at the edge, with the
+          title embossed up out of it in a heavy classic serif. */}
+      <section className="mx-auto max-w-[1400px] px-4 pt-4 sm:px-6 lg:px-8">
+        <div className="leather overflow-hidden rounded-[1.75rem] text-ink">
+          <div className="grid gap-8 px-8 pt-14 pb-10 sm:px-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_9.5rem] lg:gap-12 lg:px-16">
+            <div className="lg:self-center">
+              <h1 className="emboss hero-word text-[clamp(3.6rem,12.5vw,10rem)]">
+                Sourcing
+                <span className="mt-2 block text-[0.42em] font-bold">globally.</span>
+              </h1>
+              <p className="hero-caption mt-10 text-[1rem] text-ink lg:whitespace-nowrap">
+                {copy.homeCaption}
+              </p>
+            </div>
+
+            <div className="flex gap-3 lg:flex-col">
+              {rail.map((c, i) => (
+                <Link
+                  key={c.title}
+                  href={c.href}
+                  style={{ "--i": i } as React.CSSProperties}
+                  className="tile hero-rail-item group flex-1 bg-cream/70 ring-1 ring-olive/15 text-ink no-underline"
+                >
+                  <div className="aspect-[4/3] bg-cream-sheet/70 transition-colors group-hover:bg-cream" />
+                  <p className="nav-label px-3 pb-3 text-ink">{c.title}</p>
+                </Link>
+              ))}
+              <Link
+                href="/shop"
+                className="pill hero-pill bg-olive text-cream hover:bg-olive-deep lg:mt-2"
+              >
+                Visit the shop
+              </Link>
+            </div>
+          </div>
+
+          <ul className="relative z-10 flex flex-wrap gap-x-8 gap-y-2 bg-olive px-8 py-5 text-cream sm:px-14 lg:px-16">
+            {site.markets.map((m) => (
+              <li key={m} className="text-[0.875rem] font-bold tracking-[0.18em] text-cream uppercase">
+                {m}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-[1400px] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+          <Press as="h2" className="display display-lg max-w-[14ch]">
+            We find, we source, we procure, we coordinate.
+          </Press>
+          <p className="max-w-[46ch] text-[1rem] text-ink lg:justify-self-end">
+            {copy.homeIntro}
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+
+        <div className="tile tile-hover mt-12 flex aspect-[16/6] items-end bg-cream-sheet p-6">
+          <span className="micro text-ink">Plate to follow</span>
         </div>
-      </main>
-    </div>
+
+        <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+          <Press as="h2" className="display display-lg max-w-[16ch]">
+            Shop the collection.
+          </Press>
+          <p className="max-w-[46ch] text-[1rem] text-ink lg:justify-self-end">
+            Furniture and home &amp; décor we hold in stock, at a fixed price,
+            ordered and paid for online.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+          {shopCategories.map((c, i) => (
+            <Press key={c.slug} index={i} className="flex flex-col gap-4">
+              <div className="tile tile-hover flex aspect-[4/3] items-end bg-cream-sheet p-5">
+                <span className="micro text-ink">Plate to follow</span>
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <p className="text-[1.0625rem]">{c.title}</p>
+                  <p className="mt-1 text-[0.9375rem] text-ink">{c.body}</p>
+                </div>
+                <Link
+                  href={`/shop?category=${c.slug}`}
+                  className="pill shrink-0 bg-olive text-cream hover:bg-olive-deep"
+                >
+                  Shop
+                </Link>
+              </div>
+            </Press>
+          ))}
+        </div>
+
+        <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+          <Press as="h2" className="display display-lg max-w-[16ch]">
+            Sourced to order.
+          </Press>
+          <p className="max-w-[46ch] text-[1rem] text-ink lg:justify-self-end">
+            No fixed price. Tell us what you need and we come back with
+            options and costs before anything is bought.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {productCategories.map((c, i) => (
+            <Press key={c.ref} index={i} className="flex flex-col gap-4">
+              <div className="tile tile-hover relative flex aspect-[4/3] items-end overflow-hidden bg-cream-sheet p-5">
+                {c.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                ) : (
+                  <span className="micro text-ink">Plate to follow</span>
+                )}
+              </div>
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-[1.0625rem]">{c.title}</p>
+                <Link
+                  href={c.dedicated ?? "/contact"}
+                  className="pill shrink-0 bg-olive text-cream hover:bg-olive-deep"
+                >
+                  {c.dedicated ? "Open" : "Request"}
+                </Link>
+              </div>
+            </Press>
+          ))}
+        </div>
+      </section>
+
+      <div
+        className="marquee mt-20 overflow-hidden bg-cream-sheet py-4 text-ink lg:mt-28"
+        aria-hidden
+      >
+        <div className="marquee-track">
+          {[0, 1].map((k) => (
+            <span key={k} className="micro whitespace-nowrap pr-4 text-ink">
+              {marqueeLine.repeat(3)}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <section className="ground bg-cream-sheet text-ink">
+        <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start lg:px-8 lg:py-28">
+          <div className="tile flex aspect-[4/5] items-end bg-cream ring-1 ring-olive/15 p-6 lg:sticky lg:top-28">
+            <span className="micro text-ink">Plate to follow</span>
+          </div>
+          <div>
+            <Press as="h2" className="display display-lg max-w-[16ch]">
+              Six steps, from your request to delivery.
+            </Press>
+            <p className="mt-5 max-w-[46ch] text-[1rem] text-ink">
+              You approve the options and the costs before anything is bought.
+            </p>
+            <ol className="mt-10 grid gap-3 sm:grid-cols-2">
+              {process.map((p) => (
+                <li key={p.step} className="rounded-[1.25rem] bg-cream ring-1 ring-olive/15 p-5">
+                  <span data-numeral className="micro text-ink">
+                    {p.step}
+                  </span>
+                  <p className="mt-2 text-[1.0625rem] font-medium lowercase">{p.title}</p>
+                  <p className="mt-1.5 text-[0.9375rem] text-ink">{p.body}</p>
+                </li>
+              ))}
+            </ol>
+            <div className="mt-10 flex flex-wrap gap-3">
+              <Link href="/contact" className="pill bg-olive text-cream hover:bg-olive-deep">
+                Request a quote
+              </Link>
+              <Link
+                href="/services"
+                className="pill border border-olive/40 text-olive hover:bg-olive hover:text-cream"
+              >
+                All eight services
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {testimonials.length > 0 ? (
+        <section className="mx-auto max-w-[1400px] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+          <Press as="h2" className="display display-lg max-w-[14ch]">
+            What clients say.
+          </Press>
+          <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {testimonials.map((t, i) => (
+              <Press as="li" key={t.name + i} index={i} className="rounded-[1.25rem] bg-cream-sheet p-6">
+                <p className="text-[1.0625rem] leading-[1.6]">&ldquo;{t.quote}&rdquo;</p>
+                <p className="micro mt-5 text-olive">{t.name}</p>
+                {t.company ? <p className="micro mt-1 text-ink">{t.company}</p> : null}
+              </Press>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      <section className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <Press as="h2" className="display display-lg max-w-[14ch]">
+          What we do.
+        </Press>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {coreServices.map((s, i) => (
+            <Press key={s.ref} index={i} className="rounded-[1.25rem] bg-cream-sheet p-6">
+              <span data-numeral className="micro text-ink">
+                {s.ref}
+              </span>
+              <p className="mt-3 text-[1.125rem] font-medium">{s.title}</p>
+              <p className="mt-2 text-[0.9375rem] text-ink">{s.body}</p>
+            </Press>
+          ))}
+        </div>
+      </section>
+    </>
   );
 }

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OPTIEDGE — Effect candidates</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #F7F6F3; color: #16181A; font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 48px 28px 96px; }
+  .kicker { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; letter-spacing: 0.09em; text-transform: uppercase; color: #8A9095; }
+  h1 { font-size: 30px; font-weight: 600; letter-spacing: -0.02em; margin: 8px 0 6px; }
+  .sub { color: #5C6166; font-size: 14.5px; max-width: 60ch; line-height: 1.6; }
+  section { margin-top: 56px; }
+  h2 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; margin: 0 0 4px; }
+  .note { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px; color: #8A9095; margin-bottom: 18px; }
+
+  /* ── 1. Spotlight cards ─────────────────────────────── */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .spot-card {
+    position: relative; border-radius: 6px; padding: 1px; overflow: hidden;
+    background: #E2E0DA; cursor: default;
+  }
+  .spot-card::before {
+    content: ''; position: absolute; inset: -40%;
+    background: radial-gradient(220px circle at var(--x, 50%) var(--y, 50%), rgba(31,122,77,0.85), transparent 65%);
+    opacity: 0; transition: opacity .3s ease;
+  }
+  .spot-card:hover::before { opacity: 1; }
+  .spot-inner {
+    position: relative; border-radius: 5px; background: #FFFFFF; padding: 20px 18px; height: 100%;
+  }
+  .spot-inner::after {
+    content: ''; position: absolute; inset: 0; border-radius: 5px; pointer-events: none;
+    background: radial-gradient(320px circle at var(--x, 50%) var(--y, 50%), rgba(31,122,77,0.07), transparent 60%);
+    opacity: 0; transition: opacity .3s ease;
+  }
+  .spot-card:hover .spot-inner::after { opacity: 1; }
+  .spot-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10.5px; letter-spacing: 0.07em; text-transform: uppercase; color: #8A9095; }
+  .spot-value { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 26px; color: #16181A; margin-top: 8px; }
+  .spot-value em { font-style: normal; color: #2E6B4F; }
+  .spot-desc { font-size: 12.5px; color: #5C6166; line-height: 1.55; margin-top: 10px; }
+
+  /* ── 2. Decrypt / scramble text ─────────────────────── */
+  .scramble-stage { border: 1px solid #E2E0DA; border-radius: 6px; background: #FFFFFF; padding: 34px 30px; }
+  .scramble {
+    font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: clamp(20px, 3.4vw, 34px);
+    letter-spacing: 0.01em; color: #16181A; cursor: default; min-height: 1.3em; display: block;
+  }
+  .scramble .locked { color: #2E6B4F; }
+  .scramble .churn { color: #A8ACB0; }
+  .replay {
+    margin-top: 18px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 11px;
+    color: #5C6166; background: #FFFFFF; border: 1px solid #E2E0DA; border-radius: 3px;
+    padding: 7px 12px; cursor: pointer;
+  }
+  .replay:hover { border-color: #C9C6BE; color: #16181A; }
+
+  /* ── 3. Shine-sweep + magnetic buttons ──────────────── */
+  .btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; border: 1px solid #E2E0DA; border-radius: 6px; background: #FFFFFF; padding: 34px 30px; }
+  .shine-btn {
+    position: relative; overflow: hidden; display: inline-flex; align-items: center; justify-content: center;
+    height: 44px; padding: 0 22px; border: 0; border-radius: 4px; cursor: pointer;
+    background: #14603C; color: #FFF; font-family: 'IBM Plex Sans', sans-serif; font-size: 15px;
+    transition: transform .18s ease, box-shadow .18s ease; will-change: transform;
+    box-shadow: 0 2px 3px rgba(11,20,16,0.12), 0 8px 14px -8px rgba(11,20,16,0.25);
+  }
+  .shine-btn.secondary { background: #FFFFFF; color: #16181A; border: 1px solid #D8D5CD; box-shadow: none; }
+  .shine-btn::after {
+    content: ''; position: absolute; top: -20%; bottom: -20%; width: 36%; left: -50%;
+    transform: skewX(-22deg); pointer-events: none;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.42), transparent);
+    transition: none; opacity: 0;
+  }
+  .shine-btn:hover::after { opacity: 1; animation: sweep .8s ease forwards; }
+  /* implemented in the artboards via fx.js */
+  .shine-btn.secondary::after { background: linear-gradient(90deg, transparent, rgba(31,122,77,0.16), transparent); }
+  @keyframes sweep { to { left: 120%; } }
+
+  /* ── 4. Border beam ─────────────────────────────────── */
+  .beam-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .beam-card { position: relative; border-radius: 6px; padding: 1px; overflow: hidden; background: #E2E0DA; }
+  .beam-card::before {
+    content: ''; position: absolute; inset: -150%;
+    background: conic-gradient(from var(--a, 0deg), transparent 0 78%, #1F7A4D 88%, #7FE0AE 94%, transparent 100%);
+    animation: beamspin 4.5s linear infinite;
+  }
+  .beam-card:nth-child(2)::before { animation-delay: -2.25s; }
+  @property --a { syntax: '<angle>'; initial-value: 0deg; inherits: false; }
+  @keyframes beamspin { to { --a: 360deg; } }
+  .beam-inner { position: relative; border-radius: 5px; background: #FFFFFF; padding: 20px 18px; }
+  .beam-inner .spot-desc { margin-top: 8px; }
+
+  /* ── 5. Cursor-lit dot grid ─────────────────────────── */
+  .dotfield {
+    position: relative; height: 240px; border: 1px solid #E2E0DA; border-radius: 6px; overflow: hidden;
+    background: #FFFFFF;
+  }
+  .dotfield .dots {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle 1.5px, #2E6B4F 99%, transparent), radial-gradient(circle 1.5px, #2E6B4F 99%, transparent);
+    background-size: 22px 22px; background-position: 0 0, 11px 11px;
+    -webkit-mask-image: radial-gradient(180px circle at var(--x, -300px) var(--y, -300px), #000 30%, transparent 75%);
+    mask-image: radial-gradient(180px circle at var(--x, -300px) var(--y, -300px), #000 30%, transparent 75%);
+  }
+  .dotfield .dots-faint {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle 1.5px, #E4E2DB 99%, transparent), radial-gradient(circle 1.5px, #E4E2DB 99%, transparent);
+    background-size: 22px 22px; background-position: 0 0, 11px 11px;
+  }
+  .dotfield .center-copy {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 13px; color: #5C6166; pointer-events: none;
+  }
+
+  /* ── 6. Tilt card ───────────────────────────────────── */
+  .tilt-wrap { perspective: 900px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .tilt-card {
+    border: 1px solid #E2E0DA; border-radius: 8px; background: #FFFFFF; padding: 22px 20px;
+    transform-style: preserve-3d; transition: transform .12s ease-out, box-shadow .25s ease; will-change: transform;
+  }
+  .tilt-card:hover { box-shadow: 0 22px 44px -24px rgba(11,20,16,0.35); }
+  .tilt-card .pop { transform: translateZ(28px); display: block; }
+
+  /* ── 7. Count-up stats ──────────────────────────────── */
+  .count-row { display: flex; gap: 0; border: 1px solid #E2E0DA; border-radius: 6px; background: #FFFFFF; overflow: hidden; }
+  .count-cell { flex: 1; padding: 20px 18px; border-right: 1px solid #EFEDE7; }
+  .count-cell:last-child { border-right: 0; }
+  .count-num { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 25px; color: #16181A; }
+  .count-num em { font-style: normal; color: #2E6B4F; }
+
+  /* ── 8. Click ripple ────────────────────────────────── */
+  .ripple-btn { position: relative; overflow: hidden; }
+  .ripple-ink {
+    position: absolute; border-radius: 50%; pointer-events: none; transform: scale(0);
+    background: rgba(255,255,255,0.35); animation: rip .55s ease-out forwards;
+  }
+  .ripple-btn.secondary .ripple-ink { background: rgba(31,122,77,0.18); }
+  @keyframes rip { to { transform: scale(2.6); opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="kicker">OPTIEDGE · interaction candidates</div>
+  <h1>Three effects to replace the glass</h1>
+  <p class="sub">Each one is plain CSS + a few lines of JS — no experimental APIs, works in every browser. All tuned to the design's paper background, mono type, and green accent.</p>
+
+  <section>
+    <h2>1 · Spotlight cards</h2>
+    <div class="note">border + interior glow track the cursor · good for the metrics strip, skills grid, and pricing cards</div>
+    <div class="cards">
+      <div class="spot-card"><div class="spot-inner">
+        <div class="spot-label">verified</div>
+        <div class="spot-value"><em>8</em>/12</div>
+        <div class="spot-desc">Every span checked against the source before you see it.</div>
+      </div></div>
+      <div class="spot-card"><div class="spot-inner">
+        <div class="spot-label">cost</div>
+        <div class="spot-value">$0.0041</div>
+        <div class="spot-desc">Priced to four decimals — what you pay, not a markup tier.</div>
+      </div></div>
+      <div class="spot-card"><div class="spot-inner">
+        <div class="spot-label">cache</div>
+        <div class="spot-value"><em>71%</em></div>
+        <div class="spot-desc">Repeat structure is cached, so reruns cost a fraction.</div>
+      </div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2 · Decrypt reveal</h2>
+    <div class="note">characters churn then lock in left-to-right · fits the verification brand · good for hero headline and section titles</div>
+    <div class="scramble-stage">
+      <span class="scramble" id="scr"></span>
+      <button class="replay" onclick="runScramble()">↻ replay</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>3 · Shine sweep + magnetic pull</h2>
+    <div class="note">a sheen sweeps across on hover while the button leans toward the cursor · good for the two hero CTAs</div>
+    <div class="btn-row">
+      <button class="shine-btn magnetic">Run your first task</button>
+      <button class="shine-btn secondary magnetic">See a verified run</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>4 · Border beam</h2>
+    <div class="note">a light pulse orbits the card border continuously · needs no cursor · good for the "live run" receipt card and featured pricing tier</div>
+    <div class="beam-row">
+      <div class="beam-card"><div class="beam-inner">
+        <div class="spot-label">live run</div>
+        <div class="spot-value">r_8f31c40a</div>
+        <div class="spot-desc">qwen3-32b · $0.0041 · 2.84s · verified 8/12</div>
+      </div></div>
+      <div class="beam-card"><div class="beam-inner">
+        <div class="spot-label">team plan</div>
+        <div class="spot-value">$249<span style="font-size:13px;color:#8A9095">/mo</span></div>
+        <div class="spot-desc">50k verified tasks, unlimited skills, SSO.</div>
+      </div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>5 · Cursor-lit dot grid</h2>
+    <div class="note">a field of brand-green dots is revealed only around the cursor · good as a hero or section background behind the globe</div>
+    <div class="dotfield" id="dotfield">
+      <div class="dots-faint"></div>
+      <div class="dots"></div>
+      <div class="center-copy">move the cursor through this panel</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6 · Tilt card</h2>
+    <div class="note">the card tilts in 3D toward the cursor, content floats above the surface · good for the skills grid and feature cards</div>
+    <div class="tilt-wrap">
+      <div class="tilt-card"><span class="pop">
+        <div class="spot-label">skill</div>
+        <div class="spot-value">contract-review</div>
+        <div class="spot-desc">Extracts terms, flags deviations from your playbook, cites the clause.</div>
+      </span></div>
+      <div class="tilt-card"><span class="pop">
+        <div class="spot-label">skill</div>
+        <div class="spot-value">submission-intake</div>
+        <div class="spot-desc">12 fields, strict schema, abstains instead of guessing.</div>
+      </span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>7 · Count-up stats</h2>
+    <div class="note">numbers roll up from zero when they scroll into view · good for the metrics strip · <button class="replay" style="margin:0" onclick="runCounts()">↻ replay</button></div>
+    <div class="count-row" id="counts">
+      <div class="count-cell"><div class="spot-label">tasks verified / mo</div><div class="count-num" data-target="94210" data-format="comma">0</div></div>
+      <div class="count-cell"><div class="spot-label">median cost</div><div class="count-num" data-target="0.0041" data-format="usd4">$0</div></div>
+      <div class="count-cell"><div class="spot-label">cache hit</div><div class="count-num" data-target="71" data-format="pct">0%</div></div>
+      <div class="count-cell"><div class="spot-label">regions</div><div class="count-num" data-target="9" data-format="int">0</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>8 · Click ripple</h2>
+    <div class="note">material-style ink ripple from the click point · pairs with any button style · click these</div>
+    <div class="btn-row">
+      <button class="shine-btn ripple-btn" style="background:#16181A">accept 8</button>
+      <button class="shine-btn secondary ripple-btn">re-run</button>
+    </div>
+  </section>
+</div>
+
+<script>
+  // 1 · spotlight: write cursor position into CSS vars
+  document.querySelectorAll('.spot-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--x', (e.clientX - r.left) + 'px');
+      card.style.setProperty('--y', (e.clientY - r.top) + 'px');
+      card.querySelector('.spot-inner').style.setProperty('--x', (e.clientX - r.left) + 'px');
+      card.querySelector('.spot-inner').style.setProperty('--y', (e.clientY - r.top) + 'px');
+    });
+  });
+
+  // 2 · decrypt reveal
+  const TARGET = 'Every answer priced, sourced, and verified.';
+  const GLYPHS = '!<>-_\\/[]{}—=+*^?#01';
+  let scrTimer = null;
+  function runScramble() {
+    const el = document.getElementById('scr');
+    clearInterval(scrTimer);
+    let frame = 0;
+    const SPEED = 1.1;           // chars locked per frame
+    const CHURN = 3;             // frames between glyph changes
+    scrTimer = setInterval(() => {
+      const locked = Math.floor(frame * SPEED);
+      let out = '';
+      for (let i = 0; i < TARGET.length; i++) {
+        if (i < locked) {
+          out += i >= TARGET.length - 9 ? '<span class="locked">' + TARGET[i] + '</span>' : TARGET[i];
+        } else if (TARGET[i] === ' ') {
+          out += ' ';
+        } else {
+          out += '<span class="churn">' + GLYPHS[(Math.random() * GLYPHS.length) | 0] + '</span>';
+        }
+      }
+      el.innerHTML = out;
+      if (locked >= TARGET.length) clearInterval(scrTimer);
+      frame++;
+    }, 1000 / 30 * (CHURN / 3));
+  }
+  runScramble();
+
+  // 5 · dot grid reveal
+  const df = document.getElementById('dotfield');
+  df.addEventListener('pointermove', e => {
+    const r = df.getBoundingClientRect();
+    const dots = df.querySelector('.dots');
+    dots.style.setProperty('--x', (e.clientX - r.left) + 'px');
+    dots.style.setProperty('--y', (e.clientY - r.top) + 'px');
+  });
+  df.addEventListener('pointerleave', () => {
+    const dots = df.querySelector('.dots');
+    dots.style.setProperty('--x', '-300px');
+    dots.style.setProperty('--y', '-300px');
+  });
+
+  // 6 · tilt
+  document.querySelectorAll('.tilt-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+      const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+      card.style.transform = 'rotateY(' + (dx * 6) + 'deg) rotateX(' + (-dy * 6) + 'deg)';
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+
+  // 7 · count-up
+  const fmt = {
+    comma: v => Math.round(v).toLocaleString('en-US'),
+    usd4:  v => '$' + v.toFixed(4),
+    pct:   v => Math.round(v) + '%',
+    int:   v => String(Math.round(v)),
+  };
+  function runCounts() {
+    document.querySelectorAll('.count-num').forEach(el => {
+      const target = parseFloat(el.dataset.target), f = fmt[el.dataset.format];
+      const t0 = performance.now(), DUR = 1400;
+      (function step(t) {
+        const p = Math.min(1, (t - t0) / DUR), e = 1 - Math.pow(1 - p, 3);
+        el.textContent = f(target * e);
+        if (p < 1) requestAnimationFrame(step);
+      })(t0);
+    });
+  }
+  new IntersectionObserver((entries, obs) => {
+    if (entries.some(e => e.isIntersecting)) { runCounts(); obs.disconnect(); }
+  }, { threshold: 0.4 }).observe(document.getElementById('counts'));
+
+  // 8 · ripple
+  document.querySelectorAll('.ripple-btn').forEach(btn => {
+    btn.addEventListener('pointerdown', e => {
+      const r = btn.getBoundingClientRect();
+      const d = Math.max(r.width, r.height);
+      const ink = document.createElement('span');
+      ink.className = 'ripple-ink';
+      ink.style.width = ink.style.height = d + 'px';
+      ink.style.left = (e.clientX - r.left - d / 2) + 'px';
+      ink.style.top = (e.clientY - r.top - d / 2) + 'px';
+      btn.appendChild(ink);
+      setTimeout(() => ink.remove(), 600);
+    });
+  });
+
+  // 3 · magnetic pull
+  document.querySelectorAll('.magnetic').forEach(btn => {
+    btn.addEventListener('pointermove', e => {
+      const r = btn.getBoundingClientRect();
+      const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+      const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+      btn.style.transform = 'translate(' + (dx * 6) + 'px,' + (dy * 5) + 'px)';
+    });
+    btn.addEventListener('pointerleave', () => { btn.style.transform = ''; });
+  });
+</script>
+</body>
+</html>

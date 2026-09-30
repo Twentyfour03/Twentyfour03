@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# keep the env template committed even though .env* is ignored above
+!.env.example
+
+# impeccable working files (review captures, decision payloads, caches)
+/.impeccable/review/
+/.impeccable/mocks/
+/.impeccable/*.json
+!/.impeccable/config.json
+
+# stray downloads
+*.zip

@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<script>
+  if (!window.__okThreeLoading) {
+    window.__okThreeLoading = 1;
+    var t = document.createElement('script');
+    t.src = 'https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js';
+    t.onload = function () {
+      if (window.Globe) return;
+      var g = document.createElement('script');
+      g.src = './globe.js';
+      document.head.appendChild(g);
+    };
+    if (!window.__okFx) {
+      var fx = document.createElement('script');
+      fx.src = './fx.js';
+      document.head.appendChild(fx);
+    }
+    document.head.appendChild(t);
+  }
+</script>
+<style>
+  html, body { margin: 0; padding: 0; background: #FFFFFF; scroll-behavior: smooth; }
+  * { box-sizing: border-box; }
+  a { color: #14603C; text-decoration: none; }
+  a:hover { color: #0E3B27; }
+  ::selection { background: #D6EADD; }
+  @keyframes okReveal { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    @keyframes okReveal { from { opacity: 0; } to { opacity: 1; } }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</helmet>
+<div style="position:relative;background:#FFFFFF;color:#0B1410;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased">
+
+  <header style="position:sticky;top:0;z-index:40;background:rgba(255,255,255,0.72);backdrop-filter:blur(16px) saturate(170%);-webkit-backdrop-filter:blur(16px) saturate(170%);border-bottom:1px solid rgba(11,20,16,0.07)">
+    <nav style="display:flex;align-items:center;justify-content:space-between;gap:24px;max-width:1280px;margin:0 auto;padding:0 28px;height:68px">
+      <a href="#top" style="display:flex;align-items:center;gap:11px;flex:0 0 auto">
+        <span style="width:20px;height:20px;border:1.6px solid #0B1410;border-radius:4px;position:relative;display:block"><span style="position:absolute;left:4px;top:4px;width:6px;height:6px;background:#1F7A4D;border-radius:1px;display:block"></span></span>
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13px;font-weight:500;letter-spacing:0.1em;color:#0B1410">OPTIEDGE</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:28px">
+        <sc-for list="{{ navLinks }}" as="l" hint-placeholder-count="4">
+          <a href="{{ l.href }}" style="{{ l.style }}">{{ l.label }}</a>
+        </sc-for>
+      </div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <a href="Assistant.dc.html" style="flex:0 0 auto;white-space:nowrap;display:flex;align-items:center;justify-content:center;height:38px;padding:0 15px;border:1px solid rgba(11,20,16,0.10);border-radius:3px;background:rgba(255,255,255,0.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,0.85);font-size:15px;color:#2A3630" style-hover="border-color:rgba(11,20,16,0.22);color:#0B1410">Sign in</a>
+        <a href="Assistant.dc.html" class="ok-shine ok-magnet" style="flex:0 0 auto;white-space:nowrap;position:relative;display:flex;align-items:center;justify-content:center;height:38px;padding:0 17px;border-radius:3px;background:#14603C;font-size:15px;color:#FFFFFF;box-shadow:0 2px 2.5px rgba(11,20,16,0.10),0 9px 4.5px rgba(11,20,16,0.06),0 19px 6px rgba(11,20,16,0.04)" style-hover="background:#0E4A2E">
+          <span style="position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.28),inset 0 -1.5px 0 rgba(0,0,0,0.18);pointer-events:none"></span>
+          <span style="position:relative">Open workspace</span>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <section id="top" style="position:relative;overflow:hidden">
+    <div aria-hidden="true" style="position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(#EFF2F0 1px,transparent 1px),linear-gradient(90deg,#EFF2F0 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 78%);-webkit-mask-image:radial-gradient(120% 80% at 50% 0%,#000 30%,transparent 78%)"></div>
+
+    <div style="position:relative;max-width:1280px;margin:0 auto;padding:64px 28px 0;display:flex;flex-direction:column;align-items:center;text-align:center">
+      <div style="display:inline-flex;align-items:center;gap:9px;padding:7px 13px;border:1px solid #D3E4DA;border-radius:3px;background:#F2F8F4;animation:okReveal .7s ease both;animation-delay:60ms">
+        <span style="width:6px;height:6px;border-radius:50%;background:#1F7A4D;box-shadow:0 0 0 3px rgba(31,122,77,0.14)"></span>
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#14603C;white-space:nowrap">{{ badge }}</span>
+      </div>
+
+      <h1 style="max-width:19ch;margin:22px 0 0;font-size:clamp(44px,6.2vw,84px);line-height:1.02;letter-spacing:-0.035em;font-weight:500;text-wrap:balance;animation:okReveal .7s ease both;animation-delay:120ms">Every answer priced, sourced, and <span style="color:#1F7A4D">verified</span>.</h1>
+
+      <p style="max-width:56ch;margin:22px 0 0;font-size:17.5px;line-height:1.6;color:#4A5651;text-wrap:pretty;animation:okReveal .7s ease both;animation-delay:180ms">{{ sub }}</p>
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:30px;animation:okReveal .7s ease both;animation-delay:240ms">
+        <a href="Assistant.dc.html" class="ok-shine ok-magnet" style="flex:0 0 auto;white-space:nowrap;position:relative;display:flex;align-items:center;justify-content:center;height:46px;padding:0 22px;border-radius:3px;background:#14603C;font-size:16px;letter-spacing:-0.01em;color:#FFFFFF;box-shadow:0 2px 2.5px rgba(11,20,16,0.10),0 9px 4.5px rgba(11,20,16,0.07),0 19px 6px rgba(11,20,16,0.05),0 34px 7px rgba(11,20,16,0.02)" style-hover="background:#0E4A2E">
+          <span style="position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 2px 2px rgba(255,255,255,0.30),inset 0 -1.5px 0 rgba(0,0,0,0.22);pointer-events:none"></span>
+          <span style="position:relative">Run your first task</span>
+        </a>
+        <a href="Verification%20Console.dc.html" class="ok-shine ok-shine-dark ok-magnet" style="flex:0 0 auto;white-space:nowrap;display:flex;align-items:center;justify-content:center;height:46px;padding:0 22px;border:1px solid #DFE5E1;border-radius:3px;background:#FFFFFF;color:#1B2620;font-size:16px;letter-spacing:-0.01em" style-hover="border-color:#BFCCC4">See a verified run</a>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;margin-top:26px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:#6E7A74;animation:okReveal .7s ease both;animation-delay:300ms">
+        <sc-for list="{{ proof }}" as="p" hint-placeholder-count="3">
+          <span style="display:inline-flex;align-items:center;gap:7px;white-space:nowrap"><span style="color:#1F7A4D">{{ p.mark }}</span>{{ p.label }}</span>
+        </sc-for>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;margin-top:34px;border:1px solid #E7EBE9;border-radius:4px;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);overflow:hidden;animation:okReveal .7s ease both;animation-delay:360ms">
+        <sc-for list="{{ metrics }}" as="m" hint-placeholder-count="4">
+          <div style="{{ m.style }}">
+            <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:0.09em;text-transform:uppercase;color:#8B968F;white-space:nowrap">{{ m.label }}</div>
+            <div style="{{ m.valueStyle }}">{{ m.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+    </div>
+
+    <div style="position:relative;height:min(600px,62vw);margin-top:34px;overflow:hidden;animation:okReveal 1s ease both;animation-delay:460ms">
+      <div style="position:absolute;left:50%;top:0;transform:translateX(-50%);width:min(1060px,116vw);height:min(1060px,116vw)">
+        <x-import component-from-global-scope="Globe" dot-color="#1F7A4D" marker-color="#0E3B27" markers="{{ markers }}" speed="{{ 0.9 }}" spacing="{{ 1.05 }}" dot-size="{{ 0.0055 }}" scale="{{ 0.9 }}" hint-size="100%,100%"></x-import>
+      </div>
+      <div aria-hidden="true" style="position:absolute;left:0;right:0;bottom:0;height:120px;pointer-events:none;background:linear-gradient(to bottom,rgba(255,255,255,0),#FFFFFF 78%)"></div>
+
+      <div style="position:absolute;left:50%;top:40%;transform:translateX(-50%);width:min(420px,86vw)">
+        <div class="ok-spot" style="border-radius:10px;background:rgba(255,255,255,0.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid #E7EBE9;box-shadow:0 18px 44px -22px rgba(11,20,16,0.45)">
+        <div style="padding:15px 17px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.07em;text-transform:uppercase;color:#3D4A43">live run</span>
+            <span style="display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;color:#14603C;background:rgba(255,255,255,0.55);border:1px solid rgba(31,122,77,0.28);border-radius:3px;padding:2px 6px;white-space:nowrap">✓ verified 8/12</span>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:12px 22px;margin-top:13px">
+            <sc-for list="{{ receipt }}" as="r" hint-placeholder-count="4">
+              <div>
+                <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:0.07em;text-transform:uppercase;color:#6B7871;white-space:nowrap">{{ r.label }}</div>
+                <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:13.5px;margin-top:3px;color:#0B1410;white-space:nowrap">{{ r.value }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </div>
+      </div>
+
+      <div style="position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:9px 14px;border-radius:4px;background:rgba(255,255,255,0.45);backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);border:1px solid rgba(255,255,255,0.7);box-shadow:inset 0 1.5px 0 rgba(255,255,255,0.95),0 10px 28px -16px rgba(11,20,16,0.4);font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:#2A3630;white-space:nowrap">
+        <span style="width:6px;height:6px;border-radius:50%;background:#1F7A4D"></span>
+        {{ liveLabel }}
+      </div>
+    </div>
+  </section>
+
+  <section id="product" style="border-top:1px solid #EFF2F0;background:#FBFCFB">
+    <div style="max-width:1280px;margin:0 auto;padding:72px 28px">
+      <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.09em;text-transform:uppercase;color:#9BA5A0">Product</div>
+      <h2 style="max-width:26ch;margin:14px 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.1;letter-spacing:-0.028em;font-weight:500">A verification engine, not a wrapper around a chat API.</h2>
+      <p style="max-width:62ch;margin:16px 0 0;font-size:16.5px;line-height:1.65;color:#4A5651;text-wrap:pretty">Every request is decoded against a schema, checked against its source, and repaired or escalated when the check fails. You see each of those steps, and what each one cost.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:14px;margin-top:34px">
+        <sc-for list="{{ features }}" as="f" hint-placeholder-count="4">
+          <div class="ok-spot" style="padding:20px;border:1px solid #E7EBE9;border-radius:6px;background:#FFFFFF">
+            <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#1F7A4D">{{ f.step }}</div>
+            <div style="font-size:16.5px;letter-spacing:-0.015em;margin-top:11px;font-weight:500">{{ f.title }}</div>
+            <div style="font-size:14.5px;line-height:1.6;color:#5A655F;margin-top:8px">{{ f.body }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:16px;display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+        <a href="Verification%20Console.dc.html" class="ok-shine ok-magnet" style="white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 18px;border-radius:3px;background:#14603C;color:#FFFFFF;font-size:15px" style-hover="background:#0E4A2E">Open the extraction workspace</a>
+        <a href="Assistant.dc.html" class="ok-shine ok-shine-dark ok-magnet" style="white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 18px;border:1px solid #DFE5E1;border-radius:3px;background:#FFFFFF;color:#1B2620;font-size:15px" style-hover="border-color:#BFCCC4">Try the assistant</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" style="border-top:1px solid #EFF2F0">
+    <div style="max-width:1280px;margin:0 auto;padding:72px 28px">
+      <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.09em;text-transform:uppercase;color:#9BA5A0">Skills</div>
+      <h2 style="max-width:24ch;margin:14px 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.1;letter-spacing:-0.028em;font-weight:500">Install a skill, or teach it your own work.</h2>
+      <p style="max-width:62ch;margin:16px 0 0;font-size:16.5px;line-height:1.65;color:#4A5651;text-wrap:pretty">Each skill carries its own measured verification rate and cost per run. No stars, no reviews — the numbers come from your runs.</p>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:30px">
+        <sc-for list="{{ skills }}" as="s" hint-placeholder-count="6">
+          <a href="Assistant.dc.html" class="ok-spot" style="display:block;padding:16px;border:1px solid #E7EBE9;border-radius:6px;background:#FFFFFF;color:inherit" style-hover="border-color:#C9D6CE">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+              <span style="font-size:15px;font-weight:500;letter-spacing:-0.015em">{{ s.name }}</span>
+              <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:9.5px;letter-spacing:0.04em;text-transform:uppercase;color:#5A655F;background:#F2F4F3;border:1px solid #E7EBE9;border-radius:3px;padding:2px 6px;white-space:nowrap">{{ s.kind }}</span>
+            </div>
+            <div style="font-size:13.5px;line-height:1.55;color:#6E7A74;margin-top:9px;min-height:42px">{{ s.desc }}</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:11px;padding-top:10px;border-top:1px solid #F1F4F2;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#8B968F">
+              <span style="color:#1F7A4D">{{ s.rate }}</span>
+              <span>{{ s.cost }}</span>
+              <span>{{ s.runs }}</span>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section id="docs" style="border-top:1px solid #EFF2F0;background:#FBFCFB">
+    <div style="max-width:1280px;margin:0 auto;padding:72px 28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;align-items:start">
+      <div>
+        <div style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;letter-spacing:0.09em;text-transform:uppercase;color:#9BA5A0">Docs</div>
+        <h2 style="max-width:22ch;margin:14px 0 0;font-size:clamp(30px,3.4vw,42px);line-height:1.1;letter-spacing:-0.028em;font-weight:500">One call. The receipt comes back with the answer.</h2>
+        <p style="max-width:56ch;margin:16px 0 0;font-size:16.5px;line-height:1.65;color:#4A5651;text-wrap:pretty">Every response carries the model that ran, the verification result per field, and the cost to four decimals — in the payload, not a separate dashboard.</p>
+        <div style="display:flex;flex-direction:column;gap:1px;margin-top:24px;background:#E7EBE9;border:1px solid #E7EBE9;border-radius:6px;overflow:hidden">
+          <sc-for list="{{ docLinks }}" as="d" hint-placeholder-count="4">
+            <a href="Verification%20Console.dc.html" style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:#FFFFFF;padding:13px 15px;color:#1B2620" style-hover="background:#F7F9F8">
+              <span style="font-size:14.5px">{{ d.label }}</span>
+              <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#8B968F;white-space:nowrap">{{ d.meta }}</span>
+            </a>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="border:1px solid #E7EBE9;border-radius:6px;overflow:hidden;background:#FFFFFF">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-bottom:1px solid #EFF2F0;background:#FBFCFB;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;color:#8B968F">
+          <span style="display:inline-flex;align-items:center;gap:8px">
+            <span style="{{ snippetDotStyle }}"></span>
+            POST /v1/tasks
+          </span>
+          <span style="color:#9BA5A0;white-space:nowrap">{{ snippetStatus }}</span>
+        </div>
+        <pre ref="{{ snippetRef }}" style="margin:0;padding:16px;min-height:322px;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;line-height:1.75;color:#2A3630;white-space:pre-wrap;overflow-x:auto">{{ typed }}<span style="{{ caretStyle }}"></span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section style="border-top:1px solid #EFF2F0">
+    <div style="max-width:1280px;margin:0 auto;padding:72px 28px;text-align:center;display:flex;flex-direction:column;align-items:center">
+      <h2 style="max-width:24ch;margin:0;font-size:clamp(30px,3.6vw,46px);line-height:1.08;letter-spacing:-0.03em;font-weight:500;text-wrap:balance">Stop paying for answers you can't check.</h2>
+      <p style="max-width:52ch;margin:16px 0 0;font-size:16.5px;line-height:1.6;color:#4A5651">Every run returns its receipt: the model that answered, the verification result per field, and the cost to four decimals.</p>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:26px">
+        <a href="Assistant.dc.html" class="ok-shine ok-magnet" style="white-space:nowrap;position:relative;display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 22px;border-radius:3px;background:#14603C;color:#FFFFFF;font-size:16px;box-shadow:0 2px 2.5px rgba(11,20,16,0.10),0 9px 4.5px rgba(11,20,16,0.07)" style-hover="background:#0E4A2E">
+          <span style="position:absolute;inset:0;border-radius:3px;box-shadow:inset 0 2px 2px rgba(255,255,255,0.30),inset 0 -1.5px 0 rgba(0,0,0,0.22);pointer-events:none"></span>
+          <span style="position:relative">Run your first task</span>
+        </a>
+        <a href="Verification%20Console.dc.html" class="ok-shine ok-shine-dark ok-magnet" style="white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;height:46px;padding:0 22px;border:1px solid #DFE5E1;border-radius:3px;background:#FFFFFF;color:#1B2620;font-size:16px" style-hover="border-color:#BFCCC4">See a verified run</a>
+      </div>
+    </div>
+  </section>
+
+  <footer style="border-top:1px solid #EFF2F0;background:#FBFCFB">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;max-width:1280px;margin:0 auto;padding:26px 28px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:16px;height:16px;border:1.4px solid #0B1410;border-radius:3px;position:relative;display:block"><span style="position:absolute;left:3px;top:3px;width:5px;height:5px;background:#1F7A4D;display:block"></span></span>
+        <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11px;letter-spacing:0.09em;color:#5A655F">OPTIEDGE</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:22px;font-size:13.5px;color:#6E7A74">
+        <a href="#product" style="color:#6E7A74">Product</a>
+        <a href="#skills" style="color:#6E7A74">Skills</a>
+        <a href="#docs" style="color:#6E7A74">Docs</a>
+        <a href="Verification%20Console.dc.html" style="color:#6E7A74">Console</a>
+      </div>
+      <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;color:#9BA5A0">© 2026 · open-weight only</span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;badgeText&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Open-weight models · deterministic verification&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero copy&quot;},&quot;subhead&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;OPTIEDGE runs open-weight models through a verification engine, then shows you the receipt: which model answered, what it cost to four decimals, and whether the output was checked against your source.&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero copy&quot;},&quot;showMetrics&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero copy&quot;}}">
+const MARKERS = [
+  { lat: 40.71, lng: -74.0 }, { lat: 51.51, lng: -0.13 }, { lat: 1.35, lng: 103.82 },
+  { lat: -33.87, lng: 151.21 }, { lat: 52.52, lng: 13.4 }, { lat: 19.43, lng: -99.13 },
+  { lat: 32.08, lng: 34.78 }, { lat: 35.68, lng: 139.69 }, { lat: -23.55, lng: -46.63 }
+];
+
+const METRICS = [
+  ['median cost / task', '$0.0041', '#0B1410'],
+  ['verified rate', '96.2%', '#1F7A4D'],
+  ['open-weight models', '7', '#0B1410'],
+  ['tasks run', '94,210', '#0B1410']
+];
+
+const FEATURES = [
+  ['01', 'Constrained decode', 'Output is generated against a compiled grammar, so a malformed field is impossible rather than unlikely.'],
+  ['02', 'Source grounding', 'Every value must be found in the document you supplied. Paraphrase is never labelled verified.'],
+  ['03', 'Abstain, don\u2019t guess', 'When the answer genuinely is not in the source, the model returns null and routes the field to a human.'],
+  ['04', 'Escalate on failure', 'A failed check re-runs on a larger model. The failed attempt is shown and priced, not buried.']
+];
+
+const SKILLS = [
+  ['Contract review', 'extraction', 'Payment, termination, and liability terms with the clause each came from.', '96.2%', '$0.0041', '312 runs'],
+  ['Invoice extraction', 'extraction', 'Vendor, line items, totals, and tax — recomputed against the printed total.', '97.1%', '$0.0011', '2,417 runs'],
+  ['Warehouse Q&A', 'SQL', 'Plain questions against your schema, with the query it ran shown.', '94.0%', '$0.0067', '1,104 runs'],
+  ['Research digest', 'grounded QA', 'Answers only from the sources you supply, and reports where they disagree.', '92.4%', '$0.0094', '176 runs'],
+  ['Email triage', 'classification', 'Sorts by intent and urgency, drafts replies only for the safe intents.', '97.9%', '$0.0006', '5,830 runs'],
+  ['Lease abstraction', 'extraction', 'Rent, escalations, options and restrictions into a standard abstract.', '95.4%', '$0.0052', '18.2k installs'],
+  ['Invoice PDF generation', 'artifact', 'Renders the document, re-extracts it, and asserts every source value survived.', '98.3%', '$0.0019', '640 runs'],
+  ['Single-file codegen', 'code', 'One file at a time, accepted only when your test suite passes.', '91.8%', '$0.0122', '204 runs']
+];
+
+const DOC_LINKS = [
+  ['Quickstart', '4 min'],
+  ['Verification reference', 'per task type'],
+  ['Model routing & escalation', 'how Auto picks'],
+  ['Pricing model', 'pass-through, no markup']
+];
+
+const SNIPPET = 'curl https://api.optiedge.com/v1/tasks \\\n  -H "Authorization: Bearer $OPTIEDGE_KEY" \\\n  -F skill=submission_intake \\\n  -F file=@northwind_msa_v3.pdf\n\n{\n  "verified":   8,\n  "unverified": 2,\n  "abstained":  2,\n  "model":      "qwen3.8-27b",\n  "escalated":  false,\n  "cost_usd":   0.0041,\n  "elapsed_s":  2.84\n}';
+
+// Animates '$0.0041' / '96.2%' / '94,210' style strings from 0 to their value,
+// preserving prefix, separators, decimals, and suffix.
+function countUpValue(raw, p) {
+  const m = String(raw).match(/^([^0-9]*)([\d,]+(?:\.\d+)?)(.*)$/);
+  if (!m || p >= 1) return raw;
+  const target = parseFloat(m[2].replace(/,/g, ''));
+  const decimals = (m[2].split('.')[1] || '').length;
+  const hasComma = m[2].indexOf(',') !== -1;
+  const eased = target * (1 - Math.pow(1 - p, 3));
+  let num = eased.toFixed(decimals);
+  if (hasComma) num = Number(num).toLocaleString('en-US');
+  return m[1] + num + m[3];
+}
+
+class Component extends DCLogic {
+  state = { gx: 50, gy: 50, cx: 40, cy: 30, typed: '', typing: false, caretOn: true, countP: 0 };
+
+  constructor(props) {
+    super(props);
+    this.snippetRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.caretTimer = setInterval(() => this.setState((s) => ({ caretOn: !s.caretOn })), 520);
+    // Count-up on the hero metrics, starting as their reveal animation lands.
+    this.countStart = setTimeout(() => {
+      const t0 = performance.now(), DUR = 1400;
+      const step = (t) => {
+        const p = Math.min(1, (t - t0) / DUR);
+        this.setState({ countP: p });
+        if (p < 1) this.countRaf = requestAnimationFrame(step);
+      };
+      this.countRaf = requestAnimationFrame(step);
+    }, 420);
+    const el = this.snippetRef.current;
+    if (!el) return;
+    // Start the "request" only when the block is actually on screen.
+    this.io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting && !this.state.typing && this.state.typed === '') this.startTyping();
+      });
+    }, { threshold: 0.25 });
+    this.io.observe(el);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.caretTimer);
+    clearInterval(this.typeTimer);
+    clearTimeout(this.countStart);
+    if (this.countRaf) cancelAnimationFrame(this.countRaf);
+    if (this.io) this.io.disconnect();
+  }
+
+  startTyping() {
+    const full = SNIPPET;
+    let i = 0;
+    this.setState({ typing: true, typed: '' });
+    this.typeTimer = setInterval(() => {
+      // request lines type fast; the JSON response lands in bigger bursts
+      i += full[i] === '\n' ? 1 : (i > full.indexOf('{\n') && full.indexOf('{\n') > -1 ? 4 : 2);
+      if (i >= full.length) {
+        clearInterval(this.typeTimer);
+        this.setState({ typed: full, typing: false });
+        return;
+      }
+      this.setState({ typed: full.slice(0, i) });
+    }, 18);
+  }
+
+  renderVals() {
+    const showMetrics = this.props.showMetrics ?? true;
+    const st = this.state;
+
+    return {
+      badge: this.props.badgeText ?? 'Open-weight models · deterministic verification',
+      sub: this.props.subhead ?? 'OPTIEDGE runs open-weight models through a verification engine, then shows you the receipt: which model answered, what it cost to four decimals, and whether the output was checked against your source.',
+      navLinks: [
+        { label: 'Product', href: '#product' },
+        { label: 'Skills', href: '#skills' },
+        { label: 'Docs', href: '#docs' },
+        { label: 'Console', href: 'Verification%20Console.dc.html' }
+      ].map((l, i) => ({
+        label: l.label, href: l.href,
+        style: 'font-size:15px;letter-spacing:-0.01em;white-space:nowrap;color:' + (i === 0 ? '#0B1410' : '#5A655F')
+      })),
+      proof: [
+        { mark: '✓', label: 'source-grounded output' },
+        { mark: '◇', label: 'abstains instead of guessing' },
+        { mark: '↗', label: 'escalates only when verification fails' }
+      ],
+      metrics: showMetrics ? METRICS.map(([label, value, color], i) => ({
+        label, value: countUpValue(value, st.countP),
+        style: 'padding:13px 22px;text-align:left;' + (i > 0 ? 'border-left:1px solid #E7EBE9' : ''),
+        valueStyle: "font-family:'JetBrains Mono',ui-monospace,monospace;font-size:16px;margin-top:5px;white-space:nowrap;color:" + color
+      })) : [],
+      markers: MARKERS,
+      liveLabel: '9 regions · 94,210 tasks verified this month',
+      features: FEATURES.map(([step, title, body]) => ({ step, title, body })),
+      skills: SKILLS.map(([name, kind, desc, rate, cost, runs]) => ({ name, kind, desc, rate, cost, runs })),
+      docLinks: DOC_LINKS.map(([label, meta]) => ({ label, meta })),
+      snippetRef: this.snippetRef,
+      typed: st.typed,
+      snippetStatus: st.typing ? 'sending…' : (st.typed ? '200 OK · 2.84s' : 'idle'),
+      snippetDotStyle: 'width:7px;height:7px;border-radius:50%;display:inline-block;background:' +
+        (st.typing ? '#C7A85F' : st.typed ? '#1F7A4D' : '#C9D0CB'),
+      caretStyle: 'display:inline-block;width:7px;height:14px;vertical-align:-2px;background:#1F7A4D;opacity:' +
+        (st.caretOn && (st.typing || !st.typed) ? '1' : '0'),
+      receipt: [
+        { label: 'model', value: 'qwen3.8-27b' },
+        { label: 'cost', value: '$0.0041' },
+        { label: 'elapsed', value: '2.84s' },
+        { label: 'cache', value: '71%' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
