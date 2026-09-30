@@ -98,6 +98,11 @@ specifies the spare-parts request with vehicle details.
 - [x] C3. Order emails to her and to the customer after payment. Built.
 - [ ] C4. Resend API key added; domain verified once the new domain exists
   (DNS records in Google Workspace's domain settings).
+  **Note (1 Oct 2026):** the current Resend account is the developer's
+  (GitHub login). Fine for testing; deliveries go to the developer's inbox
+  until a domain is verified. Before launch the client creates her own
+  Resend account, verifies the domain there, and her API key replaces the
+  test key in Vercel. Then the test account is deleted.
 - [ ] C5. Auto-reply to the customer on every request ("we have your
   request, here is what happens next").
 - [x] C6. Contact details, WhatsApp number and reply-to pulled from Sanity
@@ -137,11 +142,11 @@ services' own dashboards:
 
 ## E. Hosting, domain and deployment
 
-- [ ] E1. Code pushed to her GitHub repository; Vercel project connected
-  to it, so every push deploys.
+- [x] E1. Code pushed to her GitHub repository (Twentyfour03/Twentyfour03);
+  Vercel project connected, every push to main deploys.
 - [ ] E2. Environment variables set in Vercel: Sanity, Resend, Paystack.
   Never committed.
-- [ ] E3. Preview URL shared with the client for review while content arrives.
+- [x] E3. Live at https://twentyfour03.vercel.app (1 Oct 2026).
 - [ ] E4. Domain confirmed (bought through Google Workspace), pointed at
   Vercel, SSL live.
 - [ ] E5. Paystack webhook URL and Sanity revalidation webhook registered
