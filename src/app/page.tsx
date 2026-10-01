@@ -35,9 +35,9 @@ export default async function Home() {
           title embossed up out of it in a heavy classic serif. */}
       <section className="mx-auto max-w-[1400px] px-4 pt-4 sm:px-6 lg:px-8">
         <div className="leather overflow-hidden rounded-[1.75rem] text-ink">
-          <div className="grid gap-8 px-8 pt-14 pb-10 sm:px-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_9.5rem] lg:gap-12 lg:px-16">
-            <div className="lg:self-center">
-              <h1 className="emboss hero-word text-[clamp(3.6rem,12.5vw,10rem)]">
+          <div className="grid grid-cols-1 gap-8 px-6 pt-12 pb-8 sm:px-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_9.5rem] lg:gap-12 lg:px-16">
+            <div className="min-w-0 lg:self-center">
+              <h1 className="emboss hero-word text-[clamp(3rem,12.5vw,10rem)]">
                 Sourcing
                 <span className="mt-2 block text-[0.42em] font-bold">globally.</span>
               </h1>
@@ -46,21 +46,21 @@ export default async function Home() {
               </p>
             </div>
 
-            <div className="flex gap-3 lg:flex-col">
+            <div className="grid min-w-0 grid-cols-3 gap-3 lg:flex lg:flex-col">
               {rail.map((c, i) => (
                 <Link
                   key={c.title}
                   href={c.href}
                   style={{ "--i": i } as React.CSSProperties}
-                  className="tile hero-rail-item group flex-1 bg-cream/70 ring-1 ring-olive/15 text-ink no-underline"
+                  className="tile hero-rail-item group min-w-0 bg-cream/70 ring-1 ring-olive/15 text-ink no-underline lg:flex-1"
                 >
                   <div className="aspect-[4/3] bg-cream-sheet/70 transition-colors group-hover:bg-cream" />
-                  <p className="nav-label px-3 pb-3 text-ink">{c.title}</p>
+                  <p className="nav-label truncate px-3 pb-3 text-ink">{c.title}</p>
                 </Link>
               ))}
               <Link
                 href="/shop"
-                className="pill hero-pill bg-olive text-cream hover:bg-olive-deep lg:mt-2"
+                className="pill hero-pill col-span-3 justify-self-start bg-olive text-cream hover:bg-olive-deep lg:mt-2"
               >
                 Visit the shop
               </Link>
