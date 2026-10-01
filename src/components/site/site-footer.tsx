@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Link000, Link001 } from "@/components/ui/skiper-ui/skiper40";
+import { SocialIcon, type SocialName } from "@/components/site/social-icons";
+import { Link000 } from "@/components/ui/skiper-ui/skiper40";
 
 import { NOT_SUPPLIED, waLink } from "@/lib/content";
 import type { SiteSettings } from "@/lib/data";
@@ -20,12 +21,13 @@ export function SiteFooter({
   legal: { slug: string; title: string }[];
 }) {
   const path = usePathname();
-  const socials = [
-    { label: "Instagram", href: site.contact.instagram },
-    { label: "Facebook", href: site.contact.facebook },
-    { label: "TikTok", href: site.contact.tiktok },
-    { label: "WhatsApp", href: waLink(site.contact.whatsapp) },
-  ].filter((s): s is { label: string; href: string } => Boolean(s.href));
+  const socials: { label: SocialName; href: string | null; text: string }[] = [
+    { label: "Instagram", href: site.contact.instagram, text: "Instagram" },
+    { label: "Facebook", href: site.contact.facebook, text: "Facebook" },
+    { label: "TikTok", href: site.contact.tiktok, text: "TikTok" },
+    { label: "WhatsApp", href: waLink(site.contact.whatsapp), text: site.contact.whatsapp || "WhatsApp" },
+  ];
+  const shown = socials.filter((s): s is typeof s & { href: string } => Boolean(s.href));
   const onPortfolio = path.startsWith("/portfolio") || path.startsWith("/gallery");
   const showCta = !NO_CTA.some((p) => path.startsWith(p));
 
@@ -65,11 +67,19 @@ export function SiteFooter({
 
           <div className="flex flex-col gap-2.5">
             <p className="micro mb-1 text-dim">Follow</p>
-            {socials.length > 0 ? (
-              socials.map((s) => (
-                <Link001 key={s.label} href={s.href} className="text-[1rem]">
-                  {s.label}
-                </Link001>
+            {shown.length > 0 ? (
+              shown.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
+                  className="flex items-center gap-3 text-[1rem] no-underline transition-opacity hover:opacity-70"
+                >
+                  <SocialIcon name={s.label} />
+                  <span>{s.text}</span>
+                </a>
               ))
             ) : (
               <span className="micro text-dim">{NOT_SUPPLIED}</span>

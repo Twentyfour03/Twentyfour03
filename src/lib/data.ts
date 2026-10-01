@@ -18,11 +18,9 @@ import { sanityConfigured } from "@/sanity/env";
 import { imageUrl } from "@/sanity/image";
 import {
   coreServices as coreServicesFallback,
-  founderStory,
   galleryPlates as galleryFallback,
   legalPages as legalFallback,
   lots as lotsFallback,
-  mission as missionFallback,
   portfolioCategories as portfolioCategoriesFallback,
   process as processFallback,
   productCategories as procurementFallback,
@@ -30,7 +28,6 @@ import {
   shopItems as shopFallback,
   site,
   values as valuesFallback,
-  vision as visionFallback,
   type GalleryPlate,
   type Lot,
   type ProductCategory,

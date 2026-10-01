@@ -59,7 +59,7 @@ function ShopInner({ items: shopItems, intro, deliveryNote }: ShopProps) {
       </section>
 
       {/* Filter bar with the basket, docked under the header. */}
-      <div className="sticky top-[calc(var(--frame)+4.6rem)] z-40 mt-12 border-y border-olive/15 bg-cream/95 backdrop-blur">
+      <div className="sticky top-[calc(var(--frame)+4.95rem)] sm:top-[calc(var(--frame)+4.6rem)] z-40 mt-12 border-y border-olive/15 bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex flex-wrap gap-2" role="group" aria-label="Filter the shop">
             {([{ slug: "all", title: "Everything" }, ...shopCategories] as const).map((c) => (

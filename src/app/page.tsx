@@ -55,7 +55,7 @@ export default async function Home() {
                   className="tile hero-rail-item group min-w-0 bg-cream/70 ring-1 ring-olive/15 text-ink no-underline lg:flex-1"
                 >
                   <div className="aspect-[4/3] bg-cream-sheet/70 transition-colors group-hover:bg-cream" />
-                  <p className="nav-label truncate px-3 pb-3 text-ink">{c.title}</p>
+                  <p className="nav-label px-2 pb-3 text-[0.6rem] leading-snug text-ink sm:px-3 sm:text-xs">{c.title}</p>
                 </Link>
               ))}
               <Link
@@ -67,9 +67,9 @@ export default async function Home() {
             </div>
           </div>
 
-          <ul className="relative z-10 flex flex-wrap gap-x-8 gap-y-2 bg-olive px-8 py-5 text-cream sm:px-14 lg:px-16">
+          <ul className="relative z-10 grid grid-cols-3 gap-x-4 gap-y-3 bg-olive px-6 py-5 text-cream sm:flex sm:flex-wrap sm:gap-x-8 sm:px-14 lg:px-16">
             {site.markets.map((m) => (
-              <li key={m} className="text-[0.875rem] font-bold tracking-[0.18em] text-cream uppercase">
+              <li key={m} className="text-[0.7rem] font-bold tracking-[0.14em] text-cream uppercase sm:text-[0.875rem] sm:tracking-[0.18em]">
                 {m}
               </li>
             ))}

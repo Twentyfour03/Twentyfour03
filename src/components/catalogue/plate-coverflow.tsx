@@ -36,14 +36,22 @@ export function PlateCoverflow({
         }
         .plate-coverflow .swiper-button-prev,
         .plate-coverflow .swiper-button-next {
-          width: 2.75rem; height: 2.75rem; margin-top: -1.375rem;
-          color: var(--color-cream);
-          border: 1px solid color-mix(in srgb, var(--color-cream) 45%, transparent);
-          transition: background-color 200ms, color 200ms;
+          position: static; margin: 0;
+          width: 3rem; height: 3rem; border-radius: 9999px;
+          background: var(--color-cream); color: var(--color-burgundy);
+          box-shadow: 0 10px 24px -12px rgb(0 0 0 / 0.6);
+          transition: transform 200ms, background-color 200ms;
         }
         .plate-coverflow .swiper-button-prev:hover,
         .plate-coverflow .swiper-button-next:hover {
-          background: var(--color-cream); color: var(--color-burgundy);
+          background: var(--color-cream-sheet); transform: translateY(-1px);
+        }
+        .plate-coverflow .swiper-button-disabled { opacity: 1; }
+        @media (min-width: 640px) {
+          .plate-coverflow .swiper-button-prev,
+          .plate-coverflow .swiper-button-next { position: absolute; top: 50%; margin-top: -1.5rem; }
+          .plate-coverflow .swiper-button-prev { left: 0.5rem; }
+          .plate-coverflow .swiper-button-next { right: 0.5rem; }
         }
         .plate-coverflow .swiper-button-prev::after,
         .plate-coverflow .swiper-button-next::after { display: none; }
@@ -93,13 +101,15 @@ export function PlateCoverflow({
           </SwiperSlide>
         ))}
 
+      </Swiper>
+      <div className="mt-2 flex justify-center gap-3 sm:static sm:mt-0 sm:block">
         <button
           type="button"
           aria-label="Previous plate"
           className="swiper-button-prev grid place-items-center"
         >
           <svg viewBox="0 0 16 16" fill="none" aria-hidden className="h-4 w-4">
-            <path d="M10 3.5 5.5 8 10 12.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M10 3.5 5.5 8 10 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
         <button
@@ -108,10 +118,10 @@ export function PlateCoverflow({
           className="swiper-button-next grid place-items-center"
         >
           <svg viewBox="0 0 16 16" fill="none" aria-hidden className="h-4 w-4">
-            <path d="m6 3.5 4.5 4.5L6 12.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="m6 3.5 4.5 4.5L6 12.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-      </Swiper>
+      </div>
     </div>
   );
 }

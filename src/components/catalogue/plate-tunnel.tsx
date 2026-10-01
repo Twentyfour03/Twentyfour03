@@ -23,8 +23,18 @@ export function PlateTunnel({ plates }: { plates: GalleryPlate[] }) {
   const [depth, setDepth] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    setDepth(true);
+    // The tunnel needs room. On phones, and for readers who asked for
+    // reduced motion, the plain grid is the better gallery.
+    const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const wide = window.matchMedia("(min-width: 640px)");
+    const decide = () => setDepth(!motion.matches && wide.matches);
+    decide();
+    wide.addEventListener("change", decide);
+    motion.addEventListener("change", decide);
+    return () => {
+      wide.removeEventListener("change", decide);
+      motion.removeEventListener("change", decide);
+    };
   }, []);
 
   useEffect(() => {
@@ -74,7 +84,7 @@ export function PlateTunnel({ plates }: { plates: GalleryPlate[] }) {
         className={cn(
           depth
             ? "sticky top-0 flex h-svh items-center justify-center overflow-hidden [perspective:1100px] [perspective-origin:50%_45%]"
-            : "grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-3",
+            : "grid gap-8 py-8 sm:grid-cols-2 lg:grid-cols-3",
         )}
       >
         {plates.map((plate, i) => (
@@ -112,7 +122,7 @@ export function PlateTunnel({ plates }: { plates: GalleryPlate[] }) {
               </span>
               <span
                 data-numeral
-                className={cn("micro", depth ? "text-ink" : "text-ink")}
+                className={cn("micro", depth ? "text-ink" : "text-dim")}
               >
                 {plate.ref}
               </span>
