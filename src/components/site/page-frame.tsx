@@ -19,7 +19,7 @@ export function PageFrame() {
   const pathname = usePathname();
   if (pathname.startsWith("/studio")) return null;
   const plain = pathname.startsWith("/contact") || pathname.startsWith("/about");
-  const burgundy = pathname.startsWith("/portfolio") || pathname.startsWith("/gallery");
+  const burgundy = pathname.startsWith("/portfolio");
   const band = burgundy ? "border-burgundy-deep" : "border-cream";
   const ink = burgundy ? "text-cream" : "text-olive";
 

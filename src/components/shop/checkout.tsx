@@ -5,6 +5,7 @@ import { useState, type FormEvent } from "react";
 import { confirmOrder, startCheckout, type Customer } from "@/app/actions/orders";
 import { Field, TextareaField } from "@/components/forms/fields";
 import { ghs, useBasket } from "@/components/shop/basket";
+import { useCurrency } from "@/components/shop/currency";
 
 type PaystackPopup = {
   newTransaction: (opts: {
@@ -13,6 +14,7 @@ type PaystackPopup = {
     amount: number;
     currency: string;
     reference: string;
+    metadata?: unknown;
     onSuccess: (tx: { reference: string }) => void;
     onCancel: () => void;
   }) => void;
@@ -37,8 +39,14 @@ function loadPaystack(): Promise<void> {
   });
 }
 
-export function Checkout() {
+/**
+ * `onPaying` tells the basket panel to step aside while Paystack's own
+ * window is up: the panel is a modal dialog, and anything behind a modal
+ * dialog cannot be seen or clicked.
+ */
+export function Checkout({ onPaying }: { onPaying: (paying: boolean) => void }) {
   const { lines, total, clear } = useBasket();
+  const { code, money } = useCurrency();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [done, setDone] = useState<string | null>(null);
@@ -64,7 +72,7 @@ export function Checkout() {
       city: String(f.get("city") ?? ""),
       notes: String(f.get("notes") ?? ""),
     };
-    const order = lines.map((l) => ({ id: l.id, qty: l.qty }));
+    const order = lines.map((l) => ({ id: l.id, qty: l.qty, colour: l.colour }));
 
     setBusy(true);
     setMessage(null);
@@ -85,6 +93,7 @@ export function Checkout() {
       return;
     }
 
+    onPaying(true);
     const popup = new window.PaystackPop!();
     popup.newTransaction({
       key: start.publicKey,
@@ -92,8 +101,10 @@ export function Checkout() {
       amount: start.amount,
       currency: "GHS",
       reference: start.reference,
+      metadata: start.metadata,
       onSuccess: async (tx) => {
         const result = await confirmOrder(tx.reference, order, customer);
+        onPaying(false);
         setBusy(false);
         if (result.ok) {
           clear();
@@ -103,6 +114,7 @@ export function Checkout() {
         }
       },
       onCancel: () => {
+        onPaying(false);
         setBusy(false);
         setMessage("Payment was cancelled. Your basket is still here.");
       },
@@ -116,6 +128,34 @@ export function Checkout() {
           {message}
         </p>
       ) : null}
+      <section aria-label="Order summary" className="rounded-[1.25rem] bg-cream-sheet p-5">
+        <p className="micro text-olive">Your order</p>
+        <ul className="mt-3 space-y-3">
+          {lines.map((l) => (
+            <li key={l.key} className="flex items-start justify-between gap-4 text-[0.9375rem]">
+              <span>
+                {l.qty} × {l.item.name}
+                {l.colour ? <span className="block text-ink-dim">Colour: {l.colour}</span> : null}
+              </span>
+              <span className="shrink-0" data-numeral>
+                {ghs(l.price * l.qty)}
+              </span>
+            </li>
+          ))}
+        </ul>
+        <div className="mt-4 flex items-baseline justify-between border-t border-olive/15 pt-4">
+          <span className="micro text-ink">Total to pay</span>
+          <span className="text-[1.125rem] font-semibold" data-numeral>
+            {ghs(total)}
+          </span>
+        </div>
+        {code !== "GHS" ? (
+          <p className="mt-1 text-right text-[0.875rem] text-ink-dim">About {money(total)}. You are charged in Ghana cedis.</p>
+        ) : null}
+        <p className="mt-3 text-[0.875rem] text-ink-dim">
+          Prices include applicable taxes, and shipping to Ghana unless an item says otherwise.
+        </p>
+      </section>
       <Field name="name" label="Full name" required autoComplete="name" error={errors.name} />
       <Field name="email" label="Email" type="email" required autoComplete="email" error={errors.email} />
       <Field name="phone" label="WhatsApp / phone" type="tel" required autoComplete="tel" error={errors.phone} />
@@ -131,7 +171,11 @@ export function Checkout() {
       </button>
       <p className="text-[0.875rem] text-ink">
         Payment is handled securely by Paystack. Card and mobile money accepted.
-        Any delivery fee is shown in the payment window before you pay.
+        By paying you agree to our{" "}
+        <a href="/legal/terms-and-conditions" target="_blank" rel="noopener" className="underline decoration-ink/30 hover:text-olive">
+          terms &amp; conditions
+        </a>
+        .
       </p>
     </form>
   );

@@ -18,6 +18,7 @@ import { sanityConfigured } from "@/sanity/env";
 import { imageUrl } from "@/sanity/image";
 import {
   coreServices as coreServicesFallback,
+  furnitureColours,
   galleryPlates as galleryFallback,
   legalPages as legalFallback,
   lots as lotsFallback,
@@ -182,14 +183,19 @@ export async function getShopItems(): Promise<ShopItem[]> {
     }`,
   );
   if (!has(rows)) return shopFallback;
-  return rows.map((r) => ({
-    id: r._id,
-    name: r.name,
-    category: r.category,
-    price: typeof r.price === "number" ? r.price : null,
-    image: imageUrl(r.images?.[0] as never, 900),
-    note: r.description,
-  }));
+  return rows.map((r) => {
+    const images = (r.images ?? []).map((img) => imageUrl(img as never, 900)).filter(Boolean);
+    return {
+      id: r._id,
+      name: r.name,
+      category: r.category,
+      price: typeof r.price === "number" ? r.price : null,
+      image: images[0] ?? "",
+      images,
+      note: r.description,
+      colours: r.category === "furniture" ? furnitureColours : undefined,
+    };
+  });
 }
 
 type CategoryDoc = { _id: string; title: string; slug?: { current?: string }; body?: string; image?: unknown; dedicatedPage?: string };
@@ -198,16 +204,20 @@ export async function getProcurementCategories(): Promise<(ProductCategory & { i
   const rows = await query<CategoryDoc[]>(
     groq`*[_type == "procurementCategory"] | order(order asc, _createdAt asc){ _id, title, slug, body, image, dedicatedPage }`,
   );
-  if (!has(rows)) return procurementFallback.map((c) => ({ ...c, image: "" }));
-  return rows.map((r, i) => ({
-    ref: `C.${String(i + 1).padStart(2, "0")}`,
-    slug: r.slug?.current ?? r._id,
-    title: r.title,
-    body: r.body ?? "",
-    fromPrice: null,
-    dedicated: r.dedicatedPage || undefined,
-    image: imageUrl(r.image as never, 900),
-  }));
+  if (!has(rows)) return procurementFallback.map((c) => ({ ...c, image: c.image ?? "" }));
+  return rows.map((r, i) => {
+    const slug = r.slug?.current ?? r._id;
+    return {
+      ref: `C.${String(i + 1).padStart(2, "0")}`,
+      slug,
+      title: r.title,
+      body: r.body ?? "",
+      fromPrice: null,
+      dedicated: r.dedicatedPage || undefined,
+      // A category without a photo in the Studio keeps the one in content.ts.
+      image: imageUrl(r.image as never, 900) || (procurementFallback.find((c) => c.slug === slug)?.image ?? ""),
+    };
+  });
 }
 
 /* ------------------------------------------------------------------ */
@@ -238,8 +248,14 @@ export async function getProcess(): Promise<ProcessStep[]> {
   const rows = await query<{ step: string; title: string; body?: string; image?: unknown }[]>(
     groq`*[_type == "processStep"] | order(step asc){ step, title, body, image }`,
   );
-  if (!has(rows)) return processFallback.map((p) => ({ ...p, image: "" }));
-  return rows.map((r) => ({ step: r.step, title: r.title, body: r.body ?? "", image: imageUrl(r.image as never, 900) }));
+  if (!has(rows)) return processFallback;
+  return rows.map((r) => ({
+    step: r.step,
+    title: r.title,
+    body: r.body ?? "",
+    // A step without a picture in the Studio keeps the one in content.ts.
+    image: imageUrl(r.image as never, 900) || (processFallback.find((p) => p.step === r.step)?.image ?? ""),
+  }));
 }
 
 export async function getValues(): Promise<{ title: string; body: string }[]> {
@@ -293,25 +309,29 @@ export async function getProjects(): Promise<Project[]> {
       quantity: "",
       marketResearched: "",
       result: "",
-      images: [],
+      images: l.image ? [l.image] : [],
     }));
   }
-  return rows.map((r, i) => ({
-    ref: `LOT ${String(i + 1).padStart(3, "0")}`,
-    title: r.title,
-    client: r.client ?? "",
-    location: r.location ?? "Ghana",
-    source: r.source ?? "",
-    category: r.category?.title ?? "",
-    summary: r.result || r.requirements || "",
-    placeholder: false,
-    requirements: r.requirements ?? "",
-    productsSourced: r.productsSourced ?? "",
-    quantity: r.quantity ?? "",
-    marketResearched: r.marketResearched ?? "",
-    result: r.result ?? "",
-    images: (r.images ?? []).map((img) => imageUrl(img as never, 1200)).filter(Boolean),
-  }));
+  return rows.map((r, i) => {
+    const images = (r.images ?? []).map((img) => imageUrl(img as never, 1200)).filter(Boolean);
+    return {
+      ref: `LOT ${String(i + 1).padStart(3, "0")}`,
+      title: r.title,
+      client: r.client ?? "",
+      location: r.location ?? "Ghana",
+      source: r.source ?? "",
+      category: r.category?.title ?? "",
+      summary: r.result || r.requirements || "",
+      placeholder: false,
+      requirements: r.requirements ?? "",
+      productsSourced: r.productsSourced ?? "",
+      quantity: r.quantity ?? "",
+      marketResearched: r.marketResearched ?? "",
+      result: r.result ?? "",
+      image: images[0],
+      images,
+    };
+  });
 }
 
 export async function getPortfolioCategories(): Promise<string[]> {
@@ -325,14 +345,21 @@ export async function getGalleryPlates(): Promise<GalleryPlate[]> {
   const rows = await query<{ title: string; caption?: string; image?: unknown }[]>(
     groq`*[_type == "galleryPlate"] | order(order asc, _createdAt asc){ title, caption, image }`,
   );
-  if (!has(rows)) return galleryFallback;
   const roman = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
-  return rows.map((r, i) => ({
+  const fromStudio = (rows ?? []).map((r, i) => ({
     ref: `PL. ${roman[i] ?? i + 1}`,
     title: r.title,
     caption: r.caption ?? "",
     src: imageUrl(r.image as never, 1400),
   }));
+  // The Studio's plates take over once any of them has a photograph. Until
+  // then the gallery shows the photos listed in content.ts, and empty plates
+  // only show when there is no photograph anywhere.
+  const studioPhotos = fromStudio.filter((p) => p.src !== "");
+  if (studioPhotos.length > 0) return studioPhotos;
+  const filled = galleryFallback.filter((p) => p.src !== "");
+  if (filled.length > 0) return filled;
+  return fromStudio.length > 0 ? fromStudio : galleryFallback;
 }
 
 export type Testimonial = { quote: string; name: string; company: string };
@@ -349,7 +376,10 @@ export type Faq = { question: string; answer: string };
 
 export async function getFaqs(): Promise<Faq[]> {
   const rows = await query<Faq[]>(groq`*[_type == "faq"] | order(order asc, _createdAt asc){ question, answer }`);
-  return has(rows) ? rows : [];
+  if (!has(rows)) return [];
+  // The Studio was seeded with an older shipping time. Until that entry is
+  // edited there, show the client's current answer; any edit of hers wins.
+  return rows.map((f) => (f.answer === "Usually 30 to 45 days." ? { ...f, answer: "45 to 60 days, or earlier." } : f));
 }
 
 /* ------------------------------------------------------------------ */
@@ -370,7 +400,8 @@ export async function getLegalPage(slug: string): Promise<LegalPage | null> {
     groq`*[_type == "legalPage" && slug.current == $slug][0]{ title, body }`,
     { slug },
   );
-  if (doc) return { slug, title: doc.title, body: has(doc.body) ? doc.body : null, paragraphs: [] };
   const fallback = legalFallback.find((p) => p.slug === slug);
+  // A policy with no text in the Studio yet keeps the wording in content.ts.
+  if (doc) return { slug, title: doc.title, body: has(doc.body) ? doc.body : null, paragraphs: fallback?.body ?? [] };
   return fallback ? { slug, title: fallback.title, body: null, paragraphs: fallback.body } : null;
 }

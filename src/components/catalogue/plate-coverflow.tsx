@@ -83,8 +83,11 @@ export function PlateCoverflow({
         {lots.map((lot) => (
           <SwiperSlide key={lot.ref}>
             <figure className="bg-cream-sheet text-ink shadow-[0_26px_60px_-28px_rgba(0,0,0,0.85)]">
-              <div className="flex aspect-[4/3] items-end p-5">
-                {lot.placeholder ? (
+              <div className="relative flex aspect-[4/3] items-end overflow-hidden p-5">
+                {lot.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={lot.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                ) : lot.placeholder ? (
                   <span data-numeral className="micro text-ink-dim">
                     Plate to follow
                   </span>

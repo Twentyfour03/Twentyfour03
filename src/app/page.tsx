@@ -2,6 +2,7 @@ import type React from "react";
 import Link from "next/link";
 
 import { Press } from "@/components/motion/press";
+import { FluidHeading } from "@/components/site/fluid-heading";
 import { shopCategories } from "@/lib/content";
 import {
   getCoreServices,
@@ -25,8 +26,8 @@ export default async function Home() {
     getTestimonials(),
   ]);
   const rail = [
-    ...shopCategories.map((c) => ({ title: c.title, href: `/shop?category=${c.slug}` })),
-    { title: productCategories[1]?.title ?? "Sourced to order", href: "/contact" },
+    ...shopCategories.map((c) => ({ title: c.title, href: `/shop?category=${c.slug}`, image: c.image })),
+    { title: productCategories[1]?.title ?? "Sourced to order", href: "/contact", image: productCategories[1]?.image ?? "" },
   ];
 
   return (
@@ -35,13 +36,33 @@ export default async function Home() {
           title embossed up out of it in a heavy classic serif. */}
       <section className="mx-auto max-w-[1400px] px-4 pt-4 sm:px-6 lg:px-8">
         <div className="leather overflow-hidden rounded-[1.75rem] text-ink">
-          <div className="grid grid-cols-1 gap-8 px-6 pt-12 pb-8 sm:px-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_9.5rem] lg:gap-12 lg:px-16">
+          {/* The client's film, silent and looping, behind the heading. A cream
+              wash keeps the lettering clear; with reduced motion it is a still. */}
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster="/hero/still.jpg"
+            aria-hidden
+            tabIndex={-1}
+            className="absolute inset-0 h-full w-full object-cover motion-reduce:hidden"
+          >
+            <source src="/hero/background.mp4" type="video/mp4" />
+          </video>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/hero/still.jpg" alt="" aria-hidden className="absolute inset-0 hidden h-full w-full object-cover motion-reduce:block" />
+          <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-[#f1e3c4]/90 via-[#f1e3c4]/70 to-[#f1e3c4]/25" />
+          <div className="relative z-10 grid grid-cols-1 gap-8 px-6 pt-12 pb-8 sm:px-14 sm:pt-20 lg:grid-cols-[minmax(0,1fr)_9.5rem] lg:gap-12 lg:px-16">
             <div className="min-w-0 lg:self-center">
-              <h1 className="emboss hero-word text-[clamp(3rem,12.5vw,10rem)]">
-                Sourcing
-                <span className="mt-2 block text-[0.42em] font-bold">globally.</span>
-              </h1>
-              <p className="hero-caption mt-10 text-[1rem] text-ink lg:whitespace-nowrap">
+              <FluidHeading
+                className="emboss hero-word text-[clamp(3rem,12.5vw,10rem)]"
+                color="#2a4a08"
+                lines={[{ text: "Sourcing" }, { text: "globally.", className: "mt-2 text-[0.42em] font-bold" }]}
+              />
+              {/* Its own cream backing: the film behind it is dark in places. */}
+              <p className="hero-caption mt-10 w-fit rounded-[1rem] bg-cream/85 px-4 py-2 text-[1rem] text-ink lg:whitespace-nowrap">
                 {copy.homeCaption}
               </p>
             </div>
@@ -52,10 +73,16 @@ export default async function Home() {
                   key={c.title}
                   href={c.href}
                   style={{ "--i": i } as React.CSSProperties}
-                  className="tile hero-rail-item group min-w-0 bg-cream/70 ring-1 ring-olive/15 text-ink no-underline lg:flex-1"
+                  className="tile hero-rail-item group flex min-w-0 flex-col bg-cream/70 ring-1 ring-olive/15 text-ink no-underline lg:flex-1"
                 >
-                  <div className="aspect-[4/3] bg-cream-sheet/70 transition-colors group-hover:bg-cream" />
-                  <p className="nav-label px-2 pb-3 text-[0.6rem] leading-snug text-ink sm:px-3 sm:text-xs">{c.title}</p>
+                  {/* On desktop the photo takes whatever height the rail gives the tile. */}
+                  <div className="relative aspect-[4/3] bg-cream-sheet/70 transition-colors group-hover:bg-cream lg:aspect-auto lg:min-h-24 lg:flex-1">
+                    {c.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={c.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                    ) : null}
+                  </div>
+                  <p className="nav-label px-2 pt-2 pb-3 text-[0.6rem] leading-snug text-ink sm:px-3 sm:text-xs">{c.title}</p>
                 </Link>
               ))}
               <Link
@@ -87,8 +114,13 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className="tile tile-hover mt-12 flex aspect-[16/6] items-end bg-cream-sheet p-6">
-          <span className="micro text-ink">Plate to follow</span>
+        <div className="tile tile-hover relative mt-12 aspect-[16/9] bg-cream-sheet sm:aspect-[16/6]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/gallery/warehouse-01.jpg"
+            alt="A Chesterfield suite at the supplier's warehouse, ready for dispatch"
+            className="absolute inset-0 h-full w-full object-cover object-[50%_62%]"
+          />
         </div>
 
         <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
@@ -104,8 +136,13 @@ export default async function Home() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2">
           {shopCategories.map((c, i) => (
             <Press key={c.slug} index={i} className="flex flex-col gap-4">
-              <div className="tile tile-hover flex aspect-[4/3] items-end bg-cream-sheet p-5">
-                <span className="micro text-ink">Plate to follow</span>
+              <div className="tile tile-hover relative flex aspect-[4/3] items-end bg-cream-sheet p-5">
+                {c.image ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={c.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                ) : (
+                  <span className="micro text-ink">Plate to follow</span>
+                )}
               </div>
               <div className="flex items-center justify-between gap-4">
                 <div>
@@ -173,8 +210,14 @@ export default async function Home() {
 
       <section className="ground bg-cream-sheet text-ink">
         <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start lg:px-8 lg:py-28">
-          <div className="tile flex aspect-[4/5] items-end bg-cream ring-1 ring-olive/15 p-6 lg:sticky lg:top-28">
-            <span className="micro text-ink">Plate to follow</span>
+          {/* The frame takes the picture's own shape, so the writing on it is never cut. */}
+          <div className="tile relative aspect-[1156/810] bg-cream ring-1 ring-olive/15 lg:sticky lg:top-28">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/process/six-steps.jpg"
+              alt="A procurement officer and a client signing off a procurement research report"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
           </div>
           <div>
             <Press as="h2" className="display display-lg max-w-[16ch]">
@@ -232,12 +275,12 @@ export default async function Home() {
         </Press>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {coreServices.map((s, i) => (
-            <Press key={s.ref} index={i} className="rounded-[1.25rem] bg-cream-sheet p-6">
-              <span data-numeral className="micro text-ink">
+            <Press key={s.ref} index={i} className="rounded-[1.25rem] bg-deep-green p-6 text-cream">
+              <span data-numeral className="micro text-cream">
                 {s.ref}
               </span>
               <p className="mt-3 text-[1.125rem] font-medium">{s.title}</p>
-              <p className="mt-2 text-[0.9375rem] text-ink">{s.body}</p>
+              <p className="mt-2 text-[0.9375rem] text-cream">{s.body}</p>
             </Press>
           ))}
         </div>

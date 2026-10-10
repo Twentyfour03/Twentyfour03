@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Fredoka, Jost, Playfair_Display } from "next/font/google";
+import { Bodoni_Moda, Fredoka, Jost, Mrs_Saint_Delafield, Playfair_Display } from "next/font/google";
 
 import { CookieNotice } from "@/components/site/cookie-notice";
 import { PageFrame } from "@/components/site/page-frame";
@@ -32,6 +32,13 @@ const playfair = Playfair_Display({
   weight: ["700", "800", "900"],
 });
 
+const delafield = Mrs_Saint_Delafield({
+  variable: "--font-delafield",
+  subsets: ["latin"],
+  display: "swap",
+  weight: "400",
+});
+
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
@@ -53,7 +60,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bodoni.variable} ${jost.variable} ${fredoka.variable} ${playfair.variable} h-full antialiased`}
+      className={`${bodoni.variable} ${jost.variable} ${fredoka.variable} ${playfair.variable} ${delafield.variable} h-full antialiased`}
     >
       <body className="ground flex min-h-full flex-col bg-cream p-[var(--frame)] text-ink">
         <PageFrame />
@@ -62,7 +69,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         <SiteFooter settings={settings} legal={legal} />
         <WelcomeDialog
           name={settings.name}
-          mark={settings.mark}
           title={copy.welcomeTitle}
           body={copy.welcomeBody}
         />

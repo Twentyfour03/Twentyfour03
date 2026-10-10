@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 
+import { Logo } from "@/components/site/logo";
+
 
 export const WELCOME_KEY = "t403-welcome-seen";
 export const WELCOME_CLOSED_EVENT = "t403:welcome-closed";
@@ -22,12 +24,10 @@ function seen(): boolean {
  */
 export function WelcomeDialog({
   name,
-  mark,
   title,
   body,
 }: {
   name: string;
-  mark: string;
   title: string;
   body: string;
 }) {
@@ -62,9 +62,7 @@ export function WelcomeDialog({
       className="welcome m-auto w-[min(92vw,34rem)] rounded-[1.75rem] bg-transparent p-0"
     >
       <div className="leather rounded-[1.75rem] px-8 pt-12 pb-9 text-center text-ink sm:px-12">
-        <p className="mark text-[1.75rem]" data-numeral>
-          {mark}
-        </p>
+        <Logo className="h-20 text-olive" />
         <h2 id="welcome-title" className="emboss mt-4 text-[clamp(2.4rem,8vw,3.4rem)]">
           {title}
         </h2>

@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { Logo } from "@/components/site/logo";
 import { TextRoll } from "@/components/ui/skiper-ui/skiper58";
-import { nav, site } from "@/lib/content";
+import { nav } from "@/lib/content";
 import { cn } from "@/lib/utils";
 
 export function SiteHeader() {
@@ -20,15 +21,10 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-4 sm:px-8 lg:px-12">
         <Link
           href="/"
-          className="group flex items-baseline gap-3 no-underline"
+          className="group flex items-center gap-3 no-underline"
           onClick={() => setOpen(false)}
         >
-          <span
-            className="mark text-[1.5rem]"
-            data-numeral
-          >
-            {site.mark}
-          </span>
+          <Logo className="h-11 text-olive" />
           <span className={cn("micro hidden transition-colors sm:block", "text-ink group-hover:text-olive")}>
             TwentyFour03 Vintage
           </span>

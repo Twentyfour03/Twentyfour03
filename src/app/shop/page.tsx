@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { ShopView } from "@/components/shop/shop-view";
-import { getPageCopy, getShopItems, getSiteSettings } from "@/lib/data";
+import { getRates } from "@/lib/currency";
+import { getPageCopy, getShopItems } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Shop",
@@ -11,10 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ShopPage() {
-  const [items, copy, settings] = await Promise.all([getShopItems(), getPageCopy(), getSiteSettings()]);
+  const [items, copy, rates] = await Promise.all([getShopItems(), getPageCopy(), getRates()]);
   return (
     <Suspense>
-      <ShopView items={items} intro={copy.shopIntro} deliveryNote={settings.deliveryNote} />
+      <ShopView items={items} intro={copy.shopIntro} rates={rates} />
     </Suspense>
   );
 }

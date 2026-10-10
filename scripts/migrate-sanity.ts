@@ -46,7 +46,7 @@ const strip = (t: string) => t.replace(/\.$/, "");
 
 /** Questions and answers taken from the client's own spare-parts document. */
 const faqs = [
-  ["How long does shipping take?", "Usually 30 to 45 days."],
+  ["How long does shipping take?", "45 to 60 days, or earlier."],
   ["What payment methods do you accept?", "Mobile money or bank transfer. Shop items can also be paid by card online."],
   ["Can I source used parts?", "Yes. Say so in your request and we will price both."],
   ["Do you inspect goods?", "Yes. We inspect all goods before they ship and send you photos."],

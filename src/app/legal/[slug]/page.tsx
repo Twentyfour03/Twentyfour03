@@ -14,6 +14,27 @@ export async function generateMetadata({ params }: PageProps<"/legal/[slug]">): 
   return { title: page?.title ?? "Policy" };
 }
 
+type Block =
+  | { kind: "heading" | "paragraph"; text: string }
+  | { kind: "list"; items: string[] };
+
+/** content.ts marks a heading with "## " and a bullet with "- "; runs of bullets become one list. */
+function blocks(lines: string[]): Block[] {
+  const out: Block[] = [];
+  for (const line of lines) {
+    if (line.startsWith("## ")) {
+      out.push({ kind: "heading", text: line.slice(3) });
+    } else if (line.startsWith("- ")) {
+      const last = out[out.length - 1];
+      if (last?.kind === "list") last.items.push(line.slice(2));
+      else out.push({ kind: "list", items: [line.slice(2)] });
+    } else {
+      out.push({ kind: "paragraph", text: line });
+    }
+  }
+  return out;
+}
+
 export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) {
   const { slug } = await params;
   const page = await getLegalPage(slug);
@@ -27,7 +48,19 @@ export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           <PortableText value={page.body as any} />
         ) : page.paragraphs.length > 0 ? (
-          page.paragraphs.map((para, i) => <p key={i}>{para}</p>)
+          blocks(page.paragraphs).map((block, i) =>
+            block.kind === "heading" ? (
+              <h2 key={i}>{block.text}</h2>
+            ) : block.kind === "list" ? (
+              <ul key={i}>
+                {block.items.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            ) : (
+              <p key={i}>{block.text}</p>
+            ),
+          )
         ) : (
           <p>This page is being prepared and will be published here shortly.</p>
         )}

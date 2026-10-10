@@ -4,6 +4,7 @@ import Link from "next/link";
 import { PlateCoverflow } from "@/components/catalogue/plate-coverflow";
 import { DecryptReveal } from "@/components/canvasui/DecryptReveal";
 import { Press } from "@/components/motion/press";
+import { founderImages } from "@/lib/content";
 import { getPageCopy, getPortfolioCategories, getProjects, getSiteSettings } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -48,13 +49,34 @@ export default async function PortfolioPage() {
       {/* hero card with overlays */}
       <section className="mx-auto max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
         <div className="relative">
-          <div className="tile anim-plate flex aspect-[4/3] items-start bg-cream-sheet p-6 sm:aspect-[16/8]">
-            <span className="micro text-ink-dim">Portrait to follow</span>
+          {/* The whole portrait is shown, arms included. On wide screens the
+              frame is wider than the photo, so a blurred copy of it fills the
+              sides and the photo's own edges are feathered into that. */}
+          <div className="tile anim-plate relative flex aspect-square items-start bg-[#3b3a25] p-6 sm:aspect-[16/10] lg:aspect-auto lg:h-[min(80svh,48rem)]">
+            {founderImages.hero ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={founderImages.hero} alt="" aria-hidden className="absolute inset-0 hidden h-full w-full scale-[1.6] object-cover brightness-[0.72] blur-3xl sm:block" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={founderImages.hero}
+                  alt={site.founder}
+                  className="portrait-blend absolute inset-0 h-full w-full object-cover sm:object-contain"
+                />
+              </>
+            ) : (
+              <span className="micro text-ink-dim">Portrait to follow</span>
+            )}
           </div>
           <div className="tile absolute bottom-5 left-5 hidden w-32 bg-cream p-2 sm:block">
-            <div className="aspect-[4/5] rounded-[0.9rem] bg-cream-sheet" />
+            <div className="relative aspect-[4/5] overflow-hidden rounded-[0.9rem] bg-cream-sheet">
+              {founderImages.detail ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={founderImages.detail} alt="" className="absolute inset-0 h-full w-full object-cover" />
+              ) : null}
+            </div>
           </div>
-          <div className="tile absolute right-5 bottom-5 max-w-[16rem] bg-burgundy px-5 py-4">
+          <div className="tile absolute right-5 bottom-5 hidden max-w-[16rem] bg-burgundy px-5 py-4 sm:block">
             <p className="text-[1rem] font-medium">{site.founder}</p>
             <p className="micro mt-1 text-dim">{site.founderRole}</p>
           </div>
@@ -75,8 +97,14 @@ export default async function PortfolioPage() {
 
       {/* two-column collage: portrait card | profile card */}
       <section className="mx-auto grid max-w-[1400px] gap-6 px-4 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
-        <div className="tile flex aspect-[4/5] items-end bg-cream-sheet p-6">
-          <span className="micro text-ink-dim">Plate to follow</span>
+        {/* Capped to the screen on desktop, so her whole face is in view at once. */}
+        <div className="tile relative flex aspect-[4/5] items-end bg-cream-sheet p-6 lg:aspect-auto lg:h-[min(calc(100svh-9rem),46rem)]">
+          {founderImages.collage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={founderImages.collage} alt={site.founder} className="absolute inset-0 h-full w-full object-cover object-top" />
+          ) : (
+            <span className="micro text-ink-dim">Plate to follow</span>
+          )}
         </div>
 
         <div className="tile flex flex-col justify-between bg-cream p-7 text-ink sm:p-9">
@@ -131,7 +159,7 @@ export default async function PortfolioPage() {
               <Press
                 key={lot.ref}
                 index={i}
-                className="rounded-[1.25rem] bg-burgundy p-5"
+                className="rounded-[1.25rem] bg-deep-green p-5"
               >
                 <div>
                   <div>
@@ -156,8 +184,13 @@ export default async function PortfolioPage() {
             {founderStory.heading}
           </Press>
           <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,12rem)_minmax(0,1fr)]">
-            <div className="tile flex aspect-[4/5] items-end bg-cream-sheet p-4 lg:sticky lg:top-28">
-              <span className="micro text-ink-dim">Portrait to follow</span>
+            <div className="tile relative flex aspect-[4/5] items-end bg-cream-sheet p-4 lg:sticky lg:top-28">
+              {founderImages.story ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={founderImages.story} alt={site.founder} className="absolute inset-0 h-full w-full object-cover" />
+              ) : (
+                <span className="micro text-ink-dim">Portrait to follow</span>
+              )}
             </div>
             <div>
               {founderStory.paragraphs.map((p, i) => (
@@ -177,13 +210,14 @@ export default async function PortfolioPage() {
       </section>
 
       {/* categories as pills */}
-      <section className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto grid max-w-[1400px] items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:px-8">
+        <div>
         <Press as="h2" className="display display-lg">
           Portfolio categories.
         </Press>
         <ul className="mt-8 flex flex-wrap gap-2">
           {portfolioCategories.map((c) => (
-            <li key={c} className="pill border border-cream/30 text-dim">
+            <li key={c} className="pill bg-deep-green text-cream">
               {c}
             </li>
           ))}
@@ -191,6 +225,13 @@ export default async function PortfolioPage() {
         <Link href="/contact" className="pill mt-12 bg-cream text-burgundy hover:bg-cream-sheet">
           Start your project
         </Link>
+        </div>
+        {founderImages.invite ? (
+          <div className="tile relative mx-auto aspect-[4/5] w-full max-w-[22rem] bg-cream-sheet">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={founderImages.invite} alt={site.founder} loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
+          </div>
+        ) : null}
       </section>
     </div>
   );

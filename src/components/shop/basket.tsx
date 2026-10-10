@@ -12,19 +12,22 @@ import {
 
 import type { ShopItem } from "@/lib/content";
 
-export type BasketLine = { id: string; qty: number };
-export type PricedLine = BasketLine & { item: ShopItem; price: number };
+/** The same piece in two colours is two lines. */
+export type BasketLine = { id: string; qty: number; colour?: string };
+export type PricedLine = BasketLine & { key: string; item: ShopItem; price: number };
 
 const KEY = "t403-basket";
 const MAX_QTY = 50;
+
+const keyOf = (line: { id: string; colour?: string }) => `${line.id}|${line.colour ?? ""}`;
 
 type BasketContext = {
   lines: PricedLine[];
   count: number;
   total: number;
-  add: (id: string) => void;
-  setQty: (id: string, qty: number) => void;
-  remove: (id: string) => void;
+  add: (id: string, colour?: string) => void;
+  setQty: (key: string, qty: number) => void;
+  remove: (key: string) => void;
   clear: () => void;
 };
 
@@ -35,7 +38,7 @@ function price(raw: BasketLine[], shopItems: ShopItem[]): PricedLine[] {
   return raw.flatMap((line) => {
     const item = shopItems.find((i) => i.id === line.id);
     if (!item || item.price === null) return [];
-    return [{ ...line, item, price: item.price }];
+    return [{ ...line, key: keyOf(line), item, price: item.price }];
   });
 }
 
@@ -60,23 +63,25 @@ export function BasketProvider({ items, children }: { items: ShopItem[]; childre
     }
   }, [raw]);
 
-  const add = useCallback((id: string) => {
+  const add = useCallback((id: string, colour?: string) => {
     setRaw((r) => {
-      const found = r.find((l) => l.id === id);
-      if (found) return r.map((l) => (l.id === id ? { ...l, qty: Math.min(l.qty + 1, MAX_QTY) } : l));
-      return [...r, { id, qty: 1 }];
+      const key = keyOf({ id, colour });
+      if (r.some((l) => keyOf(l) === key)) {
+        return r.map((l) => (keyOf(l) === key ? { ...l, qty: Math.min(l.qty + 1, MAX_QTY) } : l));
+      }
+      return [...r, { id, qty: 1, colour }];
     });
   }, []);
 
-  const setQty = useCallback((id: string, qty: number) => {
+  const setQty = useCallback((key: string, qty: number) => {
     setRaw((r) =>
       qty <= 0
-        ? r.filter((l) => l.id !== id)
-        : r.map((l) => (l.id === id ? { ...l, qty: Math.min(qty, MAX_QTY) } : l)),
+        ? r.filter((l) => keyOf(l) !== key)
+        : r.map((l) => (keyOf(l) === key ? { ...l, qty: Math.min(qty, MAX_QTY) } : l)),
     );
   }, []);
 
-  const remove = useCallback((id: string) => setRaw((r) => r.filter((l) => l.id !== id)), []);
+  const remove = useCallback((key: string) => setRaw((r) => r.filter((l) => keyOf(l) !== key)), []);
   const clear = useCallback(() => setRaw([]), []);
 
   const value = useMemo(() => {

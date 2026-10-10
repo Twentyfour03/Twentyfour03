@@ -5,6 +5,8 @@ import { LedgerRow, Plate } from "@/components/catalogue/parts";
 import { shopCategories } from "@/lib/content";
 import { getPageCopy, getProcurementCategories, getSiteSettings, getValues } from "@/lib/data";
 import { Press } from "@/components/motion/press";
+import { Logo } from "@/components/site/logo";
+import { SourcingGlobe } from "@/components/site/sourcing-globe";
 
 export const metadata: Metadata = {
   title: "About",
@@ -26,9 +28,12 @@ export default async function AboutPage() {
       <section className="ground bg-cream-sheet text-ink">
         <div className="mx-auto max-w-[1100px] px-5 py-12 sm:px-8 lg:py-20">
           <div className="px-2 py-6 sm:px-4 sm:py-10">
-            <Press as="h1" className="display display-xl max-w-[12ch]">
-              Connecting you to global markets.
-            </Press>
+            <div className="grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,26rem)]">
+              <Press as="h1" className="display display-xl max-w-[12ch]">
+                Connecting you to global markets.
+              </Press>
+              <SourcingGlobe className="mx-auto aspect-square w-full max-w-[26rem]" />
+            </div>
 
             <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14">
               <div className="space-y-6">
@@ -39,9 +44,7 @@ export default async function AboutPage() {
                 ))}
               </div>
               <Plate className="self-start p-8 sm:p-10">
-                <p className="mark text-[2.5rem]" data-numeral>
-                  {site.mark}
-                </p>
+                <Logo className="h-20 text-olive" />
                 <p className="micro mt-4 text-ink">The agency, in short</p>
 
                 <dl className="rule-hair mt-7 space-y-4 pt-6">

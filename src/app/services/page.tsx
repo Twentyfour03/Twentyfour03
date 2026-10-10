@@ -4,6 +4,7 @@ import Link from "next/link";
 import { SectionHead } from "@/components/catalogue/parts";
 import { getPageCopy, getProcess, getServices } from "@/lib/data";
 import { Press } from "@/components/motion/press";
+import { FitImage } from "@/components/site/fit-image";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -15,8 +16,21 @@ export default async function ServicesPage() {
   const [services, process, copy] = await Promise.all([getServices(), getProcess(), getPageCopy()]);
   return (
     <>
-      <section className="ground bg-cream-sheet text-ink">
-        <div className="mx-auto max-w-[1400px] px-5 pt-16 pb-16 sm:px-8 lg:px-12 lg:pt-24">
+      <section className="relative isolate overflow-hidden bg-cream-sheet text-ink">
+        {/* The client's procurement picture sits behind the heading, held to
+            the right and washed out towards the text so the words stay clear. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/process/procurement.jpg"
+          alt=""
+          aria-hidden
+          className="absolute inset-y-0 right-0 -z-20 h-full w-full object-cover object-[70%_30%] opacity-35 md:w-[62%] md:opacity-100"
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 bg-cream-sheet/70 md:bg-transparent md:bg-gradient-to-r md:from-cream-sheet md:from-[40%] md:via-cream-sheet/85 md:via-[58%] md:to-cream-sheet/10"
+        />
+        <div className="mx-auto max-w-[1400px] px-5 pt-16 pb-16 sm:px-8 lg:px-12 lg:pt-24 lg:pb-24">
           <Press as="h1" className="display display-xl max-w-[14ch]">
             Our procurement &amp; sourcing services.
           </Press>
@@ -80,10 +94,9 @@ export default async function ServicesPage() {
             {process.map((p, i) => (
               <Press as="li" key={p.step} index={i}>
                 <figure>
-                  <div className="tile tile-hover relative flex aspect-[4/5] items-end overflow-hidden bg-cream p-5 ring-1 ring-olive/15">
+                  <div className="tile tile-hover relative flex aspect-[4/3] items-end overflow-hidden bg-cream p-5 ring-1 ring-olive/15">
                     {p.image ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={p.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
+                      <FitImage src={p.image} alt="" />
                     ) : (
                       <span className="micro text-ink">Image to follow</span>
                     )}

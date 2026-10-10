@@ -13,6 +13,9 @@
   --color-olive: #203c01;
   --color-olive-deep: #152800;
   --color-olive-lift: #2f5406;
+  /* The client's own olive ("Deep Green"), for cards and pills. The brand
+     olive above stays the logo's green. */
+  --color-deep-green: #30360e;
   --color-burgundy: #63001a;
   --color-burgundy-deep: #4a0013;
   --color-burgundy-lift: #7a1229;
@@ -29,6 +32,7 @@
   --font-display: var(--font-bodoni), "Didot", "Bodoni MT", serif;
   --font-sans: var(--font-jost), ui-sans-serif, system-ui, sans-serif;
   --font-round: var(--font-fredoka), var(--font-jost), ui-sans-serif, sans-serif;
+  --font-script: var(--font-delafield), "Snell Roundhand", cursive;
 
   /* Two clusters, a chasm between them. Nothing lives in the middle.
      The display ceiling is set by the hero's longest authored line,
@@ -649,6 +653,39 @@
 /* First-visit dialog. */
 .welcome::backdrop { background: rgb(26 26 26 / 0.45); backdrop-filter: blur(2px); }
 .welcome[open] { animation: hero-rise 500ms var(--ease-settle) both; }
+.lightbox::backdrop { background: rgb(0 0 0 / 0.85); }
+
+/* The client's mark, drawn through a mask so it takes the text colour. */
+.logo-mark {
+  aspect-ratio: 580 / 453;
+  -webkit-mask: url("/logo-mask.png") center / contain no-repeat;
+  mask: url("/logo-mask.png") center / contain no-repeat;
+}
+
+/* Portfolio hero: where the frame is wider than the portrait, the photo's
+   left and right edges fade into the blurred copy behind it. */
+@media (min-width: 640px) {
+  .portrait-blend {
+    -webkit-mask-image: linear-gradient(to right, transparent 22%, #000 36%, #000 64%, transparent 78%);
+    mask-image: linear-gradient(to right, transparent 22%, #000 36%, #000 64%, transparent 78%);
+  }
+}
+
+/* Contact: the receiver's paper is feathered into the page at both sides. */
+.photo-feather {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 16%, #000 84%, transparent);
+}
+
+/* Policy pages: section headings and bulleted lists. */
+.prose-legal h2 { font-family: var(--font-round); font-weight: 600; font-size: 1.375rem; margin-top: 2.5rem; color: var(--color-olive); }
+.prose-legal ul { list-style: disc; padding-left: 1.25rem; }
+.prose-legal li + li { margin-top: 0.5rem; }
+
+/* Contact: the invitation lettering from the client's reference. A didone
+   in capitals with one word of handwriting running under it. */
+.invite-caps { font-family: var(--font-display); font-weight: 500; letter-spacing: 0.01em; line-height: 0.95; text-transform: uppercase; }
+.invite-script { font-family: var(--font-script); font-weight: 400; line-height: 1; text-transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .welcome[open] { animation: none; }
 }

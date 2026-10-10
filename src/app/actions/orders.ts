@@ -5,7 +5,7 @@ import { randomBytes } from "node:crypto";
 import { getShopItems, getSiteSettings } from "@/lib/data";
 import { escapeHtml, rowsToHtml, sendMail } from "@/lib/mail";
 
-export type OrderLine = { id: string; qty: number };
+export type OrderLine = { id: string; qty: number; colour?: string };
 export type Customer = {
   name: string;
   email: string;
@@ -31,7 +31,11 @@ async function priceOrder(lines: OrderLine[]): Promise<PricedOrder | { ok: false
     const item = shopItems.find((i) => i.id === line.id);
     const qty = Math.trunc(Number(line.qty));
     if (!item || item.price === null || !Number.isFinite(qty) || qty < 1 || qty > 50) return { ok: false };
-    items.push({ name: item.name, qty, unit: item.price, subtotal: item.price * qty });
+    // A piece made in colours must be ordered in one of them, and only those.
+    const colour = item.colours ? item.colours.find((c) => c === line.colour) : undefined;
+    if (item.colours && !colour) return { ok: false };
+    const name = colour ? `${item.name} (${colour})` : item.name;
+    items.push({ name, qty, unit: item.price, subtotal: item.price * qty });
   }
   const goods = items.reduce((n, i) => n + i.subtotal, 0);
   const delivery = settings.deliveryFee ?? 0;
@@ -61,7 +65,16 @@ function customerErrors(c: Customer): Record<string, string> {
 }
 
 export type StartResult =
-  | { ok: true; reference: string; amount: number; delivery: number; email: string; publicKey: string }
+  | {
+      ok: true;
+      reference: string;
+      amount: number;
+      delivery: number;
+      email: string;
+      publicKey: string;
+      /** The order itself, attached to the payment so it shows in the Paystack dashboard. */
+      metadata: { custom_fields: { display_name: string; variable_name: string; value: string }[] };
+    }
   | { ok: false; message: string; fieldErrors?: Record<string, string> };
 
 /** Step 1: price the basket and hand the browser what the popup needs. */
@@ -90,6 +103,15 @@ export async function startCheckout(lines: OrderLine[], customer: Customer): Pro
     delivery: order.delivery,
     email: c.email,
     publicKey,
+    metadata: {
+      custom_fields: [
+        { display_name: "Order", variable_name: "order", value: order.items.map((i) => `${i.qty} × ${i.name}`).join("; ").slice(0, 900) },
+        { display_name: "Customer", variable_name: "customer", value: c.name },
+        { display_name: "Phone", variable_name: "phone", value: c.phone },
+        { display_name: "Deliver to", variable_name: "address", value: `${c.address}, ${c.city}`.slice(0, 300) },
+        { display_name: "Notes", variable_name: "notes", value: c.notes.slice(0, 300) || "None" },
+      ],
+    },
   };
 }
 
@@ -141,7 +163,7 @@ export async function confirmOrder(
   const rows: [string, string][] = [
     ["Reference", reference],
     ["Goods", `GHS ${order.goods.toFixed(2)}`],
-    ["Delivery", order.delivery > 0 ? `GHS ${order.delivery.toFixed(2)}` : "Arranged separately"],
+    ["Delivery", order.delivery > 0 ? `GHS ${order.delivery.toFixed(2)}` : "Included in the price unless the item says otherwise"],
     ["Paid", `GHS ${order.total.toFixed(2)}`],
     ...lineRows,
     ["Name", c.name],
