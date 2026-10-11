@@ -27,6 +27,13 @@ export function rowsToHtml(rows: [string, string][]): string {
 }
 
 
+const FALLBACK_FROM = "TwentyFour03 <onboarding@resend.dev>";
+
+/** A setting as typed into a dashboard: stray spaces and wrapping quotes removed. */
+function setting(value: string | undefined): string {
+  return (value ?? "").trim().replace(/^(["'])(.*)$/, "$2").trim();
+}
+
 /**
  * Sends one email through Resend. `to` defaults to the client's inbox.
  * Returns a plain result; callers decide what the visitor is told.
@@ -44,9 +51,9 @@ export async function sendMail({
   replyTo?: string;
   attachments?: Attachment[];
 }): Promise<{ ok: true } | { ok: false; reason: "not-configured" | "rejected" | "unreachable" }> {
-  const apiKey = process.env.RESEND_API_KEY;
-  const recipient = to || process.env.REQUEST_INBOX || (await getSiteSettings()).contact.email;
-  const from = process.env.REQUEST_FROM ?? "TwentyFour03 <onboarding@resend.dev>";
+  const apiKey = setting(process.env.RESEND_API_KEY);
+  const recipient = to || setting(process.env.REQUEST_INBOX) || (await getSiteSettings()).contact.email;
+  const from = setting(process.env.REQUEST_FROM) || FALLBACK_FROM;
 
   if (!apiKey || !recipient) {
     console.warn("[mail] Email is not configured (needs RESEND_API_KEY and REQUEST_INBOX). Not sent:", subject);
@@ -54,18 +61,27 @@ export async function sendMail({
   }
 
   try {
-    const response = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from,
-        to: recipient,
-        subject,
-        reply_to: replyTo || undefined,
-        html,
-        attachments: attachments && attachments.length > 0 ? attachments : undefined,
-      }),
-    });
+    const post = (sender: string) =>
+      fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+        body: JSON.stringify({
+          from: sender,
+          to: recipient,
+          subject,
+          reply_to: replyTo || undefined,
+          html,
+          attachments: attachments && attachments.length > 0 ? attachments : undefined,
+        }),
+      });
+
+    let response = await post(from);
+    if (!response.ok && from !== FALLBACK_FROM) {
+      // A mistyped or unverified sender must not cost an order email: say
+      // what was wrong, then send it from Resend's own address instead.
+      console.error(`[mail] Resend rejected the sender "${from}":`, await response.text());
+      response = await post(FALLBACK_FROM);
+    }
     if (!response.ok) {
       console.error("[mail] Resend rejected the send:", await response.text());
       return { ok: false, reason: "rejected" };
