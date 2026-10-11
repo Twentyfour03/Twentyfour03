@@ -195,16 +195,22 @@ type ShopDoc = {
 
 /** In-stock items only. Prices come from here and nowhere else. */
 export async function getShopItems(): Promise<ShopItem[]> {
-  const [rows, settings] = await Promise.all([
-    query<ShopDoc[]>(
-      groq`*[_type == "shopItem" && inStock != false] | order(order asc, _createdAt asc){
-        _id, name, category, price, images, note, colourChoice, colours
+  const [result, settings] = await Promise.all([
+    query<{ any: boolean; items: ShopDoc[] }>(
+      groq`{
+        "any": count(*[_type == "shopItem"]) > 0,
+        "items": *[_type == "shopItem" && inStock != false] | order(order asc, _createdAt asc){
+          _id, name, category, price, images, note, colourChoice, colours
+        }
       }`,
     ),
     getSiteSettings(),
   ]);
-  if (!has(rows)) return shopFallback;
-  return rows.map((r) => {
+  // The code catalogue stands in only while the Studio holds no shop items
+  // at all (or cannot be reached). Once it does, the Studio is the shop,
+  // even if every item is switched off.
+  if (!result || !result.any) return shopFallback;
+  return result.items.map((r) => {
     // 1400px wide: sharp in the enlarged view, still light in the grid.
     const images = (r.images ?? []).map((img) => imageUrl(img as never, 1400)).filter(Boolean);
     const colours =

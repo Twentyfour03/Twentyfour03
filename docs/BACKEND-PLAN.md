@@ -64,18 +64,18 @@ online. Orders and money are visible in her Paystack dashboard.
 
 - [x] B1. Basket, checkout form, Paystack popup, server-side price check,
   payment verification, order emails. Built.
-- [ ] B2. Order details (items, quantities, name, phone, delivery address)
+- [x] B2. Order details (items, quantities, name, phone, delivery address)
   attached to each Paystack transaction as metadata, so the dashboard and
   its CSV export are her order book.
-- [ ] B3. Webhook endpoint for `charge.success`, signature-checked, so a
+- [x] B3. Webhook endpoint (built and tested; register the URL in Paystack, then set PAYSTACK_WEBHOOK_ACTIVE=1) for `charge.success`, signature-checked, so a
   paid order is recorded and emailed even if the customer closes the tab.
-- [ ] B4. Idempotency: the same order never emails twice (popup and
+- [x] B4. Idempotency (one sender at a time, chosen by PAYSTACK_WEBHOOK_ACTIVE): the same order never emails twice (popup and
   webhook both fire).
 - [x] B5. Shop items and prices come from Sanity (A2), not code.
 - [x] B6. "In stock" toggle hides an item from the shop without deleting it.
 - [ ] B7. Delivery fee decision: free, flat, or by region. Client to decide.
   Until then, delivery is arranged after payment (current copy).
-- [ ] B8. Test keys wired for development; live keys added in Vercel only.
+- [x] B8. Test keys wired locally and a test payment completed (11 Oct 2026); still to add in Vercel for development; live keys added in Vercel only.
 - [ ] B9. Paystack Invoices for quote-first jobs. PDF 2 step 3 wants a
   quotation showing product prices, sourcing fees, shipping estimate and
   delivery timeline: each becomes a line on the Paystack invoice, which
@@ -194,3 +194,14 @@ services' own dashboards:
 - GitHub: invite the developer to the repository.
 - Vercel: invite the developer to the project (Member).
 - Decision on delivery fees (B7).
+
+## Update, 11 October 2026
+
+- The shop catalogue (47 items, 51 photos) now lives in Sanity, moved by
+  `npm run migrate:shop` then `npm run migrate:shop -- reveal`. Items keep
+  the ids they had in code. The code catalogue in `src/lib/content.ts` is
+  only a stand-in for when Sanity has no shop items at all.
+- Site settings now hold the standard colour list and the contact/social
+  links shown in the footer and on Contact.
+- Still code-only: menu items, form fields, layout, and the hero, category,
+  process, portfolio-founder and gallery fallback photos in `/public`.
