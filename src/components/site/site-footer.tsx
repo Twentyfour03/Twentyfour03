@@ -8,7 +8,6 @@ import { NewsletterForm } from "@/components/site/newsletter-form";
 import { SocialBadge } from "@/components/site/social-icons";
 import { Link000 } from "@/components/ui/skiper-ui/skiper40";
 
-import { socials } from "@/lib/content";
 import type { SiteSettings } from "@/lib/data";
 
 
@@ -23,6 +22,7 @@ export function SiteFooter({
   legal: { slug: string; title: string }[];
 }) {
   const path = usePathname();
+  const socials = site.socials;
   const onPortfolio = path.startsWith("/portfolio");
   const showCta = !NO_CTA.some((p) => path.startsWith(p));
 

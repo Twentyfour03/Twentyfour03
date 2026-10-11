@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import { SocialBadge, type SocialName } from "@/components/site/social-icons";
 import { Link000 } from "@/components/ui/skiper-ui/skiper40";
 import { ProcurementForm } from "@/components/forms/procurement-form";
-import { socials } from "@/lib/content";
 import { getFaqs, getPageCopy, getSiteSettings } from "@/lib/data";
 import { Press } from "@/components/motion/press";
 
@@ -20,6 +19,7 @@ export const metadata: Metadata = {
  */
 export default async function ContactPage() {
   const [site, copy, faqs] = await Promise.all([getSiteSettings(), getPageCopy(), getFaqs()]);
+  const socials = site.socials;
   return (
     <>
       {/* The paper is the photograph's own, so the receiver has no visible edge. */}

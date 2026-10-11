@@ -18,7 +18,6 @@ import { sanityConfigured } from "@/sanity/env";
 import { imageUrl } from "@/sanity/image";
 import {
   coreServices as coreServicesFallback,
-  furnitureColours,
   galleryPlates as galleryFallback,
   legalPages as legalFallback,
   lots as lotsFallback,
@@ -27,6 +26,8 @@ import {
   productCategories as procurementFallback,
   services as servicesFallback,
   shopItems as shopFallback,
+  socials as socialsFallback,
+  furnitureColours as furnitureColoursFallback,
   site,
   values as valuesFallback,
   type GalleryPlate,
@@ -78,7 +79,13 @@ export type SiteSettings = {
   };
   deliveryFee: number | null;
   deliveryNote: string;
+  socials: SocialLink[];
+  furnitureColours: string[];
 };
+
+export type SocialKind = "WhatsApp" | "Instagram" | "TikTok" | "Snapchat" | "Facebook" | "Email";
+export type SocialLink = { kind: SocialKind; label: string; href: string };
+const SOCIAL_KINDS: SocialKind[] = ["WhatsApp", "Instagram", "TikTok", "Snapchat", "Facebook", "Email"];
 
 type SettingsDoc = Partial<{
   name: string;
@@ -100,6 +107,8 @@ type SettingsDoc = Partial<{
   tiktok: string;
   deliveryFee: number;
   deliveryNote: string;
+  socials: { kind?: string; label?: string; href?: string }[];
+  furnitureColours: string[];
 }>;
 
 export async function getSiteSettings(): Promise<SiteSettings> {
@@ -129,6 +138,13 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     },
     deliveryFee: typeof d.deliveryFee === "number" ? d.deliveryFee : null,
     deliveryNote: text(d.deliveryNote, ""),
+    socials: (() => {
+      const fromStudio = (d.socials ?? []).filter(
+        (x): x is SocialLink => SOCIAL_KINDS.includes(x.kind as SocialKind) && Boolean(x.label) && Boolean(x.href),
+      );
+      return fromStudio.length > 0 ? fromStudio.map(({ kind, label, href }) => ({ kind, label, href })) : [...socialsFallback];
+    })(),
+    furnitureColours: has(d.furnitureColours) ? d.furnitureColours : [...furnitureColoursFallback],
   };
 }
 
@@ -172,19 +188,27 @@ type ShopDoc = {
   category: ShopItem["category"];
   price?: number;
   images?: unknown[];
-  description?: string;
+  note?: string;
+  colourChoice?: "standard" | "custom" | "none";
+  colours?: string[];
 };
 
 /** In-stock items only. Prices come from here and nowhere else. */
 export async function getShopItems(): Promise<ShopItem[]> {
-  const rows = await query<ShopDoc[]>(
-    groq`*[_type == "shopItem" && inStock != false] | order(order asc, _createdAt asc){
-      _id, name, category, price, images, description
-    }`,
-  );
+  const [rows, settings] = await Promise.all([
+    query<ShopDoc[]>(
+      groq`*[_type == "shopItem" && inStock != false] | order(order asc, _createdAt asc){
+        _id, name, category, price, images, note, colourChoice, colours
+      }`,
+    ),
+    getSiteSettings(),
+  ]);
   if (!has(rows)) return shopFallback;
   return rows.map((r) => {
-    const images = (r.images ?? []).map((img) => imageUrl(img as never, 900)).filter(Boolean);
+    // 1400px wide: sharp in the enlarged view, still light in the grid.
+    const images = (r.images ?? []).map((img) => imageUrl(img as never, 1400)).filter(Boolean);
+    const colours =
+      r.colourChoice === "standard" ? settings.furnitureColours : r.colourChoice === "custom" && has(r.colours) ? r.colours : undefined;
     return {
       id: r._id,
       name: r.name,
@@ -192,8 +216,8 @@ export async function getShopItems(): Promise<ShopItem[]> {
       price: typeof r.price === "number" ? r.price : null,
       image: images[0] ?? "",
       images,
-      note: r.description,
-      colours: r.category === "furniture" ? furnitureColours : undefined,
+      note: r.note || undefined,
+      colours,
     };
   });
 }

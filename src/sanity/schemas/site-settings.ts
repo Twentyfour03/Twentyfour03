@@ -28,6 +28,37 @@ export const siteSettings = defineType({
     defineField({ name: "mapsUrl", title: "Google Maps link", type: "url", group: "contact" }),
     defineField({ name: "hours", title: "Business hours", type: "text", rows: 3, group: "contact", description: "One line per day or range." }),
 
+    defineField({
+      name: "socials",
+      title: "Contact and social links",
+      type: "array",
+      group: "social",
+      description: "Shown in the footer and on the Contact page, in this order. Drag to reorder.",
+      of: [
+        {
+          type: "object",
+          name: "socialLink",
+          fields: [
+            defineField({
+              name: "kind",
+              title: "Platform",
+              type: "string",
+              options: { list: ["WhatsApp", "Instagram", "TikTok", "Snapchat", "Facebook", "Email"] },
+              validation: (r) => r.required(),
+            }),
+            defineField({ name: "label", title: "Shown as", type: "string", description: "The handle, number or address people see", validation: (r) => r.required() }),
+            defineField({
+              name: "href",
+              title: "Link",
+              type: "url",
+              description: "e.g. https://www.instagram.com/yourname/ , https://wa.me/233200000000 , mailto:you@example.com",
+              validation: (r) => r.required().uri({ scheme: ["https", "mailto", "tel"] }),
+            }),
+          ],
+          preview: { select: { title: "label", subtitle: "kind" } },
+        },
+      ],
+    }),
     defineField({ name: "instagram", title: "Instagram URL", type: "url", group: "social" }),
     defineField({ name: "facebook", title: "Facebook URL", type: "url", group: "social" }),
     defineField({ name: "tiktok", title: "TikTok URL", type: "url", group: "social" }),
@@ -39,6 +70,14 @@ export const siteSettings = defineType({
       group: "shop",
       description: "Flat fee added to every shop order. Leave empty for free delivery, or if delivery is arranged separately.",
       validation: (r) => r.min(0),
+    }),
+    defineField({
+      name: "furnitureColours",
+      title: "Standard colour list",
+      type: "array",
+      of: [{ type: "string" }],
+      group: "shop",
+      description: "Offered on every shop item set to 'Standard colour list'. Add or remove a colour here and it changes on all of them.",
     }),
     defineField({ name: "deliveryNote", title: "Delivery note", type: "string", group: "shop", description: "Shown at checkout, e.g. Delivery within Accra in 2 to 3 days." }),
   ],
