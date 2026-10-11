@@ -156,11 +156,8 @@ export default async function PortfolioPage() {
         >
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {lots.map((lot, i) => (
-              <Press
-                key={lot.ref}
-                index={i}
-                className="rounded-[1.25rem] bg-deep-green p-5"
-              >
+              <Press key={lot.ref} index={i} className="h-full">
+                <div className="pop h-full rounded-[1.25rem] bg-deep-green p-5">
                 <div>
                   <div>
                     <p className="text-[1.0625rem] font-medium lowercase">{lot.title}</p>
@@ -171,6 +168,7 @@ export default async function PortfolioPage() {
                 </div>
                 <p className="mt-4 text-[0.9375rem] text-dim">{lot.summary}</p>
                 <p className="micro mt-3 text-dim">{lot.category}</p>
+                </div>
               </Press>
             ))}
           </div>
@@ -217,7 +215,7 @@ export default async function PortfolioPage() {
         </Press>
         <ul className="mt-8 flex flex-wrap gap-2">
           {portfolioCategories.map((c) => (
-            <li key={c} className="pill bg-deep-green text-cream">
+            <li key={c} className="pill pop bg-deep-green text-cream">
               {c}
             </li>
           ))}

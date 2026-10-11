@@ -21,10 +21,10 @@ export default async function ServicesPage() {
             the right and washed out towards the text so the words stay clear. */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/process/procurement.jpg"
+          src="/services/founder.jpg"
           alt=""
           aria-hidden
-          className="absolute inset-y-0 right-0 -z-20 h-full w-full object-cover object-[70%_30%] opacity-35 md:w-[62%] md:opacity-100"
+          className="absolute inset-y-0 right-0 -z-20 h-full w-full object-cover object-top opacity-35 md:w-[52%] md:opacity-100 md:[mask-image:linear-gradient(to_right,transparent,black_45%)]"
         />
         <div
           aria-hidden
@@ -84,7 +84,7 @@ export default async function ServicesPage() {
         <div className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-28">
           <SectionHead
             heading="How it works."
-            lede="From your request to delivery, in six pictures."
+            lede="From your request to delivery, in six stages."
             tone="ink"
           />
 

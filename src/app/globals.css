@@ -700,3 +700,8 @@
   .text-\[1rem\] { font-size: 0.9375rem; }
   .pill { padding: 0.55rem 1rem; }
 }
+
+/* A card that lifts towards the reader on hover. */
+.pop { transition: transform 260ms var(--ease-settle), box-shadow 260ms var(--ease-settle); will-change: transform; }
+.pop:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 22px 44px -22px rgb(0 0 0 / 0.7); }
+@media (prefers-reduced-motion: reduce) { .pop, .pop:hover { transition: none; transform: none; } }
