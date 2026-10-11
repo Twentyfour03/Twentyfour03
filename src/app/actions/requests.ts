@@ -28,10 +28,42 @@ function failureMessage(reason: "not-configured" | "rejected" | "unreachable"): 
   return "We could not reach our mail service. Please try again, or message us on WhatsApp.";
 }
 
-async function toAttachment(file: File, prefix: string): Promise<Attachment> {
-  const buffer = Buffer.from(await file.arrayBuffer());
-  return { filename: `${prefix}-${file.name}`, content: buffer.toString("base64") };
+/**
+ * What the file really is, read from its first bytes. The name and the type
+ * a browser reports are chosen by the sender and prove nothing; these are
+ * emailed to the client as attachments, so only genuine images go through.
+ */
+function imageKind(bytes: Buffer): "jpg" | "png" | "gif" | "webp" | "heic" | null {
+  if (bytes.length < 12) return null;
+  if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return "jpg";
+  if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return "png";
+  if (bytes.subarray(0, 4).toString("latin1") === "GIF8") return "gif";
+  if (bytes.subarray(0, 4).toString("latin1") === "RIFF" && bytes.subarray(8, 12).toString("latin1") === "WEBP") return "webp";
+  if (bytes.subarray(4, 8).toString("latin1") === "ftyp" && /^(heic|heix|hevc|mif1|msf1|heif)/.test(bytes.subarray(8, 12).toString("latin1"))) return "heic";
+  return null;
 }
+
+const NOT_AN_IMAGE = "That file is not a photo we can open. Please attach a JPG, PNG, WebP or HEIC image.";
+
+/** Reads a file once and returns it as an attachment, or null if it is not really an image. */
+async function toAttachment(file: File, prefix: string): Promise<Attachment | null> {
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const kind = imageKind(buffer);
+  if (!kind) return null;
+  // The sender's filename is kept only as a readable hint, stripped to safe characters.
+  const stem = file.name.replace(/\.[^.]*$/, "").replace(/[^A-Za-z0-9 _-]/g, "").trim().slice(0, 40) || "photo";
+  return { filename: `${prefix}-${stem}.${kind}`, content: buffer.toString("base64") };
+}
+
+/** A hidden field no person fills in. A value there means a bot wrote the form. */
+function looksAutomated(formData: FormData): boolean {
+  return clean(formData.get("website")) !== "";
+}
+
+const QUIET_SUCCESS: RequestState = {
+  status: "success",
+  message: "Your request is with us. We will come back to you with options and costs.",
+};
 
 /**
  * The main procurement request. A client can list several items, each in
@@ -43,6 +75,7 @@ export async function submitProcurementRequest(
   _prev: RequestState,
   formData: FormData,
 ): Promise<RequestState> {
+  if (looksAutomated(formData)) return QUIET_SUCCESS;
   const values = {
     name: clean(formData.get("name")),
     company: clean(formData.get("company")),
@@ -101,7 +134,13 @@ export async function submitProcurementRequest(
 
   const attachments: Attachment[] = [];
   for (const [n, item] of items.entries()) {
-    if (item.file) attachments.push(await toAttachment(item.file, `item-${n + 1}`));
+    if (!item.file) continue;
+    const attachment = await toAttachment(item.file, `item-${n + 1}`);
+    if (!attachment) fieldErrors[`item-${ordered[n]}-file`] = NOT_AN_IMAGE;
+    else attachments.push(attachment);
+  }
+  if (Object.keys(fieldErrors).length > 0) {
+    return { status: "error", message: "One of the files is not an image.", fieldErrors };
   }
 
   const itemRows: [string, string][] = items.flatMap((item, n) => [
@@ -143,6 +182,7 @@ export async function submitSparePartsRequest(
   _prev: RequestState,
   formData: FormData,
 ): Promise<RequestState> {
+  if (looksAutomated(formData)) return QUIET_SUCCESS;
   const values = {
     name: clean(formData.get("name")),
     email: clean(formData.get("email")),
@@ -178,10 +218,15 @@ export async function submitSparePartsRequest(
     return { status: "error", message: "A few details are missing.", fieldErrors };
   }
 
+  const partPhoto = file ? await toAttachment(file, "part") : null;
+  if (file && !partPhoto) {
+    return { status: "error", message: "That file is not an image.", fieldErrors: { photo: NOT_AN_IMAGE } };
+  }
+
   const result = await sendMail({
     subject: `Spare parts request: ${values.make} ${values.model} ${values.year}`,
     replyTo: values.email || undefined,
-    attachments: file ? [await toAttachment(file, "part")] : undefined,
+    attachments: partPhoto ? [partPhoto] : undefined,
     html: rowsToHtml([
       ["Name", values.name],
       ["Email", values.email],

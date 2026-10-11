@@ -72,6 +72,8 @@ export function ProcurementForm() {
 
   return (
     <form onSubmit={onSubmit} noValidate className="mt-9 rule-hair pt-10">
+      {/* Honeypot: hidden from people, irresistible to bots. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
       {banner ? (
         <p
           role="alert"

@@ -35,6 +35,8 @@ export function SparePartsForm() {
 
   return (
     <form action={action} noValidate className="mt-9 rule-hair pt-10">
+      {/* Honeypot: hidden from people, irresistible to bots. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
       {state.status === "error" && state.message ? (
         <p
           role="alert"
