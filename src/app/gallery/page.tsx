@@ -15,7 +15,7 @@ export default async function GalleryPage() {
   const galleryPlates = await getGalleryPlates();
   return (
     <div>
-      <section className="mx-auto max-w-[1400px] px-4 pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-24">
+      <section className="mx-auto max-w-[1400px] px-5 pt-10 sm:pt-16 pb-12 sm:px-6 lg:px-8 lg:pt-24">
         <Press as="h1" className="display display-xl max-w-[12ch]">
           From the source.
         </Press>
@@ -26,7 +26,7 @@ export default async function GalleryPage() {
         </p>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[1400px] px-5 pb-12 sm:pb-20 sm:px-6 lg:px-8">
         <GalleryGrid plates={galleryPlates} />
       </section>
     </div>

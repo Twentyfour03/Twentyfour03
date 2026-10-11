@@ -27,7 +27,7 @@ export function NewsletterForm({ dark }: { dark: boolean }) {
       <p className="mt-2 text-[1rem]">New arrivals and sourcing news, now and then. No spam.</p>
       {/* Honeypot: hidden from people, irresistible to bots. */}
       <input type="text" name="company" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
-      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+      <div className="mt-3 flex flex-row gap-2 sm:mt-4">
         <input
           id="newsletter-email"
           name="email"
@@ -38,7 +38,7 @@ export function NewsletterForm({ dark }: { dark: boolean }) {
           aria-invalid={state.status === "error"}
           aria-describedby={state.status === "error" ? "newsletter-error" : undefined}
           className={cn(
-            "min-w-0 flex-1 rounded-full border px-5 py-2.5 text-[1rem]",
+            "min-w-0 flex-1 rounded-full border px-4 py-2.5 text-[1rem] sm:px-5",
             dark
               ? "border-cream/40 bg-transparent text-cream placeholder:text-cream/50"
               : "border-ink/25 bg-cream text-ink placeholder:text-ink-dim",

@@ -102,7 +102,7 @@ export function ProcurementForm() {
         <Field name="country" label="Country" autoComplete="country-name" />
       </div>
 
-      <div className="mt-14 flex items-end justify-between gap-4">
+      <div className="mt-8 sm:mt-14 flex items-end justify-between gap-4">
         <div>
           <p className="micro text-ink">What you need</p>
           <p className="mt-2 text-[0.9375rem] text-ink">
@@ -177,7 +177,7 @@ export function ProcurementForm() {
         </button>
       ) : null}
 
-      <p className="micro mt-14 text-ink">Order details</p>
+      <p className="micro mt-8 sm:mt-14 text-ink">Order details</p>
       <div className="mt-6 grid gap-8 sm:grid-cols-2">
         <Field name="budget" label="Target budget" hint="A range is fine. It narrows the search." />
         <SelectField name="market" label="Preferred sourcing market" options={sourcingMarkets} />
@@ -193,7 +193,7 @@ export function ProcurementForm() {
         <TextareaField name="notes" label="Additional information" rows={3} />
       </div>
 
-      <div className="mt-12 flex flex-wrap items-center gap-6">
+      <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-6">
         <SubmitButton pending={pending}>Submit procurement request</SubmitButton>
         {wa ? (
           <p className="text-[0.9375rem] text-ink">

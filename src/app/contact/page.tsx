@@ -45,7 +45,7 @@ export default async function ContactPage() {
         <p className="px-5 pb-10 text-[1.0625rem] text-ink sm:hidden">{copy.contactIntro}</p>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-24">
         <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-20">
           <div>
             {/* A card rising out of a burgundy envelope. */}
@@ -119,7 +119,7 @@ export default async function ContactPage() {
       </section>
 
       {faqs.length > 0 ? (
-        <section className="mx-auto max-w-[1400px] px-5 pb-24 sm:px-8 lg:px-12">
+        <section className="mx-auto max-w-[1400px] px-5 pb-12 sm:pb-24 sm:px-8 lg:px-12">
           <Press as="h2" className="display display-lg">
             Questions we are asked.
           </Press>

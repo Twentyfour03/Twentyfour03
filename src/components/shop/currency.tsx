@@ -96,7 +96,7 @@ export function CurrencyPicker() {
         <ul
           role="listbox"
           aria-label="Currency"
-          className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-[1rem] bg-cream py-1 shadow-[0_18px_40px_-18px_rgba(26,26,26,0.55)] ring-1 ring-olive/15"
+          className="absolute left-0 z-50 mt-2 w-60 overflow-hidden sm:right-0 sm:left-auto rounded-[1rem] bg-cream py-1 shadow-[0_18px_40px_-18px_rgba(26,26,26,0.55)] ring-1 ring-olive/15"
         >
           {currencies.map((c) => (
             <li key={c.code} role="option" aria-selected={c.code === code}>

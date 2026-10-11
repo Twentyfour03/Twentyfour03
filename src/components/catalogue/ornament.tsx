@@ -72,7 +72,7 @@ export function FramedPanel({
         <CornerScroll className="absolute right-1.5 bottom-1.5 scale-[-1] opacity-60" />
       </div>
 
-      <div className="relative px-7 py-16 sm:px-14 sm:py-20 lg:px-20 lg:py-24">
+      <div className="relative px-7 py-10 sm:px-14 sm:py-20 lg:px-20 lg:py-24">
         {children}
       </div>
     </div>

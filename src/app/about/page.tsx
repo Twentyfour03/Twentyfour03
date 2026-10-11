@@ -35,7 +35,7 @@ export default async function AboutPage() {
               <SourcingGlobe className="mx-auto aspect-square w-full max-w-[26rem]" />
             </div>
 
-            <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14">
+            <div className="mt-8 sm:mt-12 grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)] lg:gap-14">
               <div className="space-y-6">
                 {copy.aboutIntro.map((para, i) => (
                   <p key={i} className="prose-measure text-[1.0625rem] text-ink">
@@ -71,13 +71,13 @@ export default async function AboutPage() {
               </Plate>
             </div>
 
-            <p className="display display-lg mt-14 max-w-[22ch]">{copy.aboutObjective}</p>
+            <p className="display display-lg mt-8 sm:mt-14 max-w-[22ch]">{copy.aboutObjective}</p>
           </div>
         </div>
       </section>
 
       {/* Mission and vision, plated as two entries. */}
-      <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-28">
         <div>
           {[
             { ref: "M.01", title: "our mission", body: mission },
@@ -94,7 +94,7 @@ export default async function AboutPage() {
           <div className="rule-hair" />
         </div>
 
-        <div className="mt-20">
+        <div className="mt-12 sm:mt-20">
           <Press as="h2" className="display display-lg">Our values.</Press>
           <div className="mt-10">
             {values.map((v, i) => (
@@ -110,7 +110,7 @@ export default async function AboutPage() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
+        <div className="mt-10 sm:mt-16 flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
           <Link
             href="/portfolio"
             className="micro border border-ink/25 px-8 py-4 text-center no-underline transition-colors hover:bg-olive hover:text-cream"

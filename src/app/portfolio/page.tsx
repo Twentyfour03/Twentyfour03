@@ -41,13 +41,13 @@ export default async function PortfolioPage() {
   return (
     <div className="on-burgundy bg-burgundy-deep text-cream">
       {/* thin ribbon */}
-      <div className="mx-auto flex max-w-[1400px] flex-wrap gap-x-8 gap-y-1 px-4 pt-6 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[1400px] flex-wrap gap-x-8 gap-y-1 px-5 pt-6 sm:px-6 lg:px-8">
         <span className="micro text-dim">{site.founder}</span>
         <span className="micro text-dim">{site.founderRole}</span>
       </div>
 
       {/* hero card with overlays */}
-      <section className="mx-auto max-w-[1400px] px-4 pt-6 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[1400px] px-5 pt-6 sm:px-6 lg:px-8">
         <div className="relative">
           {/* The whole portrait is shown, arms included. On wide screens the
               frame is wider than the photo, so a blurred copy of it fills the
@@ -96,7 +96,7 @@ export default async function PortfolioPage() {
       </section>
 
       {/* two-column collage: portrait card | profile card */}
-      <section className="mx-auto grid max-w-[1400px] gap-6 px-4 pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
+      <section className="mx-auto grid max-w-[1400px] gap-6 px-5 pt-10 sm:pt-16 sm:px-6 lg:grid-cols-2 lg:px-8">
         {/* Capped to the screen on desktop, so her whole face is in view at once. */}
         <div className="tile relative flex aspect-[4/5] items-end bg-cream-sheet p-6 lg:aspect-auto lg:h-[min(calc(100svh-9rem),46rem)]">
           {founderImages.collage ? (
@@ -137,7 +137,7 @@ export default async function PortfolioPage() {
       </section>
 
       {/* the plates */}
-      <section className="mx-auto max-w-[1400px] px-4 pt-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[1400px] px-5 pt-12 sm:pt-20 sm:px-6 lg:px-8">
         <Press as="h2" className="display display-lg max-w-[16ch]">
           Catalogue of selected procurement projects.
         </Press>
@@ -178,7 +178,7 @@ export default async function PortfolioPage() {
       </section>
 
       {/* the story, on cream */}
-      <section id="story" className="mx-auto mt-20 max-w-[1400px] px-4 sm:px-6 lg:px-8">
+      <section id="story" className="mx-auto mt-12 sm:mt-20 max-w-[1400px] px-5 sm:px-6 lg:px-8">
         <div className="tile bg-cream p-7 text-ink sm:p-10 lg:p-14">
           <Press as="h2" className="display display-lg max-w-[16ch]">
             {founderStory.heading}
@@ -198,7 +198,7 @@ export default async function PortfolioPage() {
                   {p}
                 </p>
               ))}
-              <blockquote className="mt-12 border-t border-ink/10 pt-8">
+              <blockquote className="mt-8 sm:mt-12 border-t border-ink/10 pt-8">
                 <p className="display display-lg max-w-[20ch] text-burgundy lowercase">
                   {founderStory.pullQuote}
                 </p>
@@ -210,7 +210,7 @@ export default async function PortfolioPage() {
       </section>
 
       {/* categories as pills */}
-      <section className="mx-auto grid max-w-[1400px] items-center gap-12 px-4 py-20 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:px-8">
+      <section className="mx-auto grid max-w-[1400px] items-center gap-12 px-5 py-12 sm:py-20 sm:px-6 md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)] lg:px-8">
         <div>
         <Press as="h2" className="display display-lg">
           Portfolio categories.
@@ -222,7 +222,7 @@ export default async function PortfolioPage() {
             </li>
           ))}
         </ul>
-        <Link href="/contact" className="pill mt-12 bg-cream text-burgundy hover:bg-cream-sheet">
+        <Link href="/contact" className="pill mt-8 sm:mt-12 bg-cream text-burgundy hover:bg-cream-sheet">
           Start your project
         </Link>
         </div>

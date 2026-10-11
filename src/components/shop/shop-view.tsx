@@ -43,7 +43,7 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
 
   return (
     <>
-      <section className="mx-auto max-w-[1400px] px-4 pt-14 sm:px-6 lg:px-8 lg:pt-20">
+      <section className="mx-auto max-w-[1400px] px-5 pt-8 sm:pt-14 sm:px-6 lg:px-8 lg:pt-20">
         <Press as="h1" className="display display-xl">
           The shop.
         </Press>
@@ -51,9 +51,13 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
       </section>
 
       {/* Filter bar with the currency and the basket, docked under the header. */}
-      <div className="sticky top-[calc(var(--frame)+4.95rem)] sm:top-[calc(var(--frame)+4.6rem)] z-40 mt-12 border-y border-olive/15 bg-cream/95 backdrop-blur">
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2" role="group" aria-label="Filter the shop">
+      <div className="sticky top-[calc(var(--frame)+4.95rem)] sm:top-[calc(var(--frame)+4.6rem)] z-40 mt-8 sm:mt-12 border-y border-olive/15 bg-cream/95 backdrop-blur">
+        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center justify-between gap-x-3 gap-y-2 px-5 py-2 sm:py-3 sm:px-6 lg:px-8">
+          <div
+            className="-mx-1 flex w-full flex-nowrap gap-2 overflow-x-auto px-1 [scrollbar-width:none] sm:mx-0 sm:w-auto sm:flex-wrap sm:px-0"
+            role="group"
+            aria-label="Filter the shop"
+          >
             {([{ slug: "all", title: "Everything" }, ...shopCategories] as const).map((c) => (
               <button
                 key={c.slug}
@@ -61,7 +65,7 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
                 aria-pressed={filter === c.slug}
                 onClick={() => setFilter(c.slug as Filter)}
                 className={cn(
-                  "pill border",
+                  "pill shrink-0 border max-sm:px-3.5",
                   filter === c.slug
                     ? "border-olive bg-olive text-cream"
                     : "border-ink/15 text-ink hover:border-olive hover:text-olive",
@@ -71,7 +75,7 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-start">
             <CurrencyPicker />
             <button
               type="button"
@@ -84,8 +88,8 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
         </div>
       </div>
 
-      <section className="mx-auto max-w-[1400px] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <ul className="grid gap-x-5 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <ul className="grid grid-cols-2 gap-x-3 gap-y-8 sm:gap-x-5 sm:gap-y-12 lg:grid-cols-4">
           {shown.map((item, i) => (
             <Press as="li" key={item.id} index={i} className="flex flex-col">
               <ShopCard
@@ -106,7 +110,7 @@ function ShopInner({ items: shopItems, intro }: ShopProps) {
         onClose={() => setZoomed(null)}
       />
 
-      <section className="mx-auto max-w-[1400px] px-4 pb-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[1400px] px-5 pb-12 sm:pb-20 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-6 rounded-[1.75rem] bg-olive px-7 py-10 text-cream sm:flex-row sm:items-center sm:justify-between sm:px-12">
           <div>
             <p className="text-[1.5rem] font-semibold">Looking for something that is not here?</p>
@@ -165,7 +169,7 @@ function ShopCard({
                   type="button"
                   aria-label="Previous photo"
                   onClick={() => setPhoto((p) => (p - 1 + photos.length) % photos.length)}
-                  className="absolute top-1/2 left-2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-cream/90 text-ink shadow hover:bg-cream"
+                  className="absolute top-1/2 left-1.5 grid size-7 -translate-y-1/2 sm:left-2 sm:size-8 place-items-center rounded-full bg-cream/90 text-ink shadow hover:bg-cream"
                 >
                   ‹
                 </button>
@@ -173,7 +177,7 @@ function ShopCard({
                   type="button"
                   aria-label="Next photo"
                   onClick={() => setPhoto((p) => (p + 1) % photos.length)}
-                  className="absolute top-1/2 right-2 grid size-8 -translate-y-1/2 place-items-center rounded-full bg-cream/90 text-ink shadow hover:bg-cream"
+                  className="absolute top-1/2 right-1.5 grid size-7 -translate-y-1/2 sm:right-2 sm:size-8 place-items-center rounded-full bg-cream/90 text-ink shadow hover:bg-cream"
                 >
                   ›
                 </button>
@@ -197,9 +201,9 @@ function ShopCard({
         )}
       </div>
 
-      <p className="micro mt-4 text-olive">{category.title}</p>
-      <p className="mt-1 text-[1.0625rem] leading-snug">{item.name}</p>
-      {item.note ? <p className="mt-1 text-[0.9375rem] text-ink-dim">{item.note}</p> : null}
+      <p className="micro mt-3 text-olive sm:mt-4">{category.title}</p>
+      <p className="mt-1 text-[0.875rem] leading-snug sm:text-[1.0625rem]">{item.name}</p>
+      {item.note ? <p className="mt-1 text-[0.8125rem] text-ink-dim sm:text-[0.9375rem]">{item.note}</p> : null}
 
       {item.colours && orderable ? (
         <label className="mt-3 block">
@@ -212,7 +216,7 @@ function ShopCard({
             }}
             aria-invalid={needColour}
             className={cn(
-              "w-full rounded-full border bg-cream px-4 py-2 text-[0.9375rem] text-ink",
+              "w-full rounded-full border bg-cream px-3 py-1.5 text-[0.8125rem] text-ink sm:px-4 sm:py-2 sm:text-[0.9375rem]",
               needColour ? "border-[var(--color-error)]" : "border-ink/20",
             )}
           >
@@ -231,7 +235,7 @@ function ShopCard({
         </label>
       ) : null}
 
-      <div className="mt-auto flex items-end justify-between gap-3 pt-3">
+      <div className="mt-auto flex flex-col gap-2 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
         <p className="text-[1rem] font-semibold" data-numeral>
           {orderable ? money(item.price!) : "Price to follow"}
           {orderable && code !== "GHS" ? (
@@ -249,7 +253,7 @@ function ShopCard({
             add(item.id, item.colours ? colour : undefined);
             onAdded();
           }}
-          className="pill shrink-0 bg-olive text-cream hover:bg-olive-deep disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink"
+          className="pill w-full shrink-0 bg-olive text-cream hover:bg-olive-deep disabled:cursor-not-allowed disabled:bg-ink/15 disabled:text-ink sm:w-auto"
         >
           {orderable ? "Add to basket" : "Coming soon"}
         </button>

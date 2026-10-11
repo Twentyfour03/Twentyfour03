@@ -34,7 +34,7 @@ export default async function Home() {
     <>
       {/* Hero: a sheet of cream leather, stitched at the edge, with the
           title embossed up out of it in a heavy classic serif. */}
-      <section className="mx-auto max-w-[1400px] px-4 pt-4 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-[1400px] px-5 pt-4 sm:px-6 lg:px-8">
         <div className="leather overflow-hidden rounded-[1.75rem] text-ink">
           {/* The client's film, silent and looping, behind the heading. A cream
               wash keeps the lettering clear; with reduced motion it is a still. */}
@@ -104,7 +104,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+      <section className="mx-auto max-w-[1400px] px-5 pt-12 sm:pt-20 sm:px-6 lg:px-8 lg:pt-28">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
           <Press as="h2" className="display display-lg max-w-[14ch]">
             We find, we source, we procure, we coordinate.
@@ -114,7 +114,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className="tile tile-hover relative mt-12 aspect-[16/9] bg-cream-sheet sm:aspect-[16/6]">
+        <div className="tile tile-hover relative mt-8 sm:mt-12 aspect-[16/9] bg-cream-sheet sm:aspect-[16/6]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/gallery/warehouse-01.jpg"
@@ -123,7 +123,7 @@ export default async function Home() {
           />
         </div>
 
-        <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+        <div className="mt-12 sm:mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
           <Press as="h2" className="display display-lg max-w-[16ch]">
             Shop the collection.
           </Press>
@@ -133,9 +133,9 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:mt-10 sm:gap-6">
           {shopCategories.map((c, i) => (
-            <Press key={c.slug} index={i} className="flex flex-col gap-4">
+            <Press key={c.slug} index={i} className="flex flex-col gap-3 sm:gap-4">
               <div className="tile tile-hover relative flex aspect-[4/3] items-end bg-cream-sheet p-5">
                 {c.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -144,10 +144,10 @@ export default async function Home() {
                   <span className="micro text-ink">Plate to follow</span>
                 )}
               </div>
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
                 <div>
                   <p className="text-[1.0625rem]">{c.title}</p>
-                  <p className="mt-1 text-[0.9375rem] text-ink">{c.body}</p>
+                  <p className="mt-1 hidden text-[0.9375rem] text-ink sm:block">{c.body}</p>
                 </div>
                 <Link
                   href={`/shop?category=${c.slug}`}
@@ -160,7 +160,7 @@ export default async function Home() {
           ))}
         </div>
 
-        <div className="mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
+        <div className="mt-12 sm:mt-20 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:items-end">
           <Press as="h2" className="display display-lg max-w-[16ch]">
             Sourced to order.
           </Press>
@@ -170,10 +170,10 @@ export default async function Home() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-3 sm:mt-10 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
           {productCategories.map((c, i) => (
-            <Press key={c.ref} index={i} className="flex flex-col gap-4">
-              <div className="tile tile-hover relative flex aspect-[4/3] items-end overflow-hidden bg-cream-sheet p-5">
+            <Press key={c.ref} index={i} className="flex flex-row items-center gap-3 sm:flex-col sm:items-stretch sm:gap-4">
+              <div className="tile tile-hover relative flex aspect-[4/3] w-28 shrink-0 items-end overflow-hidden bg-cream-sheet p-5 sm:w-auto">
                 {c.image ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={c.image} alt="" className="absolute inset-0 h-full w-full object-cover" />
@@ -181,7 +181,7 @@ export default async function Home() {
                   <span className="micro text-ink">Plate to follow</span>
                 )}
               </div>
-              <div className="flex items-center justify-between gap-4">
+              <div className="flex min-w-0 flex-1 items-center justify-between gap-3 sm:gap-4">
                 <p className="text-[1.0625rem]">{c.title}</p>
                 <Link
                   href={c.dedicated ?? "/contact"}
@@ -196,7 +196,7 @@ export default async function Home() {
       </section>
 
       <div
-        className="marquee mt-20 overflow-hidden bg-cream-sheet py-4 text-ink lg:mt-28"
+        className="marquee mt-12 sm:mt-20 overflow-hidden bg-cream-sheet py-4 text-ink lg:mt-28"
         aria-hidden
       >
         <div className="marquee-track">
@@ -209,7 +209,7 @@ export default async function Home() {
       </div>
 
       <section className="ground bg-cream-sheet text-ink">
-        <div className="mx-auto grid max-w-[1400px] gap-10 px-4 py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start lg:px-8 lg:py-28">
+        <div className="mx-auto grid max-w-[1400px] gap-10 px-5 py-12 sm:py-20 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:items-start lg:px-8 lg:py-28">
           {/* The frame takes the picture's own shape, so the writing on it is never cut. */}
           <div className="tile relative aspect-[1156/810] bg-cream ring-1 ring-olive/15 lg:sticky lg:top-28">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -228,7 +228,7 @@ export default async function Home() {
             </p>
             <ol className="mt-10 grid gap-3 sm:grid-cols-2">
               {process.map((p) => (
-                <li key={p.step} className="rounded-[1.25rem] bg-cream ring-1 ring-olive/15 p-5">
+                <li key={p.step} className="rounded-[1.25rem] bg-cream p-4 ring-1 ring-olive/15 sm:p-5">
                   <span data-numeral className="micro text-ink">
                     {p.step}
                   </span>
@@ -253,7 +253,7 @@ export default async function Home() {
       </section>
 
       {testimonials.length > 0 ? (
-        <section className="mx-auto max-w-[1400px] px-4 pt-20 sm:px-6 lg:px-8 lg:pt-28">
+        <section className="mx-auto max-w-[1400px] px-5 pt-12 sm:pt-20 sm:px-6 lg:px-8 lg:pt-28">
           <Press as="h2" className="display display-lg max-w-[14ch]">
             What clients say.
           </Press>
@@ -269,13 +269,13 @@ export default async function Home() {
         </section>
       ) : null}
 
-      <section className="mx-auto max-w-[1400px] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-6 lg:px-8 lg:py-28">
         <Press as="h2" className="display display-lg max-w-[14ch]">
           What we do.
         </Press>
         <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {coreServices.map((s, i) => (
-            <Press key={s.ref} index={i} className="rounded-[1.25rem] bg-deep-green p-6 text-cream">
+            <Press key={s.ref} index={i} className="rounded-[1.25rem] bg-deep-green p-5 text-cream sm:p-6">
               <span data-numeral className="micro text-cream">
                 {s.ref}
               </span>

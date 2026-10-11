@@ -30,7 +30,7 @@ export default async function ServicesPage() {
           aria-hidden
           className="absolute inset-0 -z-10 bg-cream-sheet/70 md:bg-transparent md:bg-gradient-to-r md:from-cream-sheet md:from-[40%] md:via-cream-sheet/85 md:via-[58%] md:to-cream-sheet/10"
         />
-        <div className="mx-auto max-w-[1400px] px-5 pt-16 pb-16 sm:px-8 lg:px-12 lg:pt-24 lg:pb-24">
+        <div className="mx-auto max-w-[1400px] px-5 pt-10 sm:pt-16 pb-10 sm:pb-16 sm:px-8 lg:px-12 lg:pt-24 lg:pb-24">
           <Press as="h1" className="display display-xl max-w-[14ch]">
             Our procurement &amp; sourcing services.
           </Press>
@@ -45,13 +45,13 @@ export default async function ServicesPage() {
       </section>
 
       {/* The eight services. Each is a full-width entry, not a card in a grid. */}
-      <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-28">
         {services.map((service, i) => (
           <Press
             as="article"
             key={service.ref}
             index={i}
-            className="ledger-row rule-hair grid gap-x-10 gap-y-6 py-12 lg:grid-cols-[10rem_minmax(0,1fr)_minmax(0,18rem)] lg:py-16"
+            className="ledger-row rule-hair grid gap-x-10 gap-y-4 py-8 sm:gap-y-6 sm:py-12 lg:grid-cols-[10rem_minmax(0,1fr)_minmax(0,18rem)] lg:py-16"
           >
             <span data-numeral className="micro pt-2 text-ink">
               {service.ref}
@@ -81,7 +81,7 @@ export default async function ServicesPage() {
 
       {/* The process, repeated here because the client asked for it on both pages. */}
       <section className="ground bg-cream-sheet text-ink">
-        <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+        <div className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-28">
           <SectionHead
             heading="How it works."
             lede="From your request to delivery, in six pictures."
@@ -90,7 +90,7 @@ export default async function ServicesPage() {
 
           {/* Six images, one per stage. The client supplies the photographs;
               each slot keeps its caption so the order still reads. */}
-          <ol className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ol className="mt-8 sm:mt-14 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
             {process.map((p, i) => (
               <Press as="li" key={p.step} index={i}>
                 <figure>
@@ -114,7 +114,7 @@ export default async function ServicesPage() {
 
           <Link
             href="/contact"
-            className="micro mt-16 inline-block bg-cream px-8 py-4 text-olive no-underline transition-colors hover:bg-cream-dim"
+            className="micro mt-10 sm:mt-16 inline-block bg-cream px-8 py-4 text-olive no-underline transition-colors hover:bg-cream-dim"
           >
             Send us your request
           </Link>

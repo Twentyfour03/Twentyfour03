@@ -110,7 +110,7 @@ export function SparePartsForm() {
         />
       </div>
 
-      <div className="mt-12 flex flex-wrap items-center gap-6">
+      <div className="mt-8 sm:mt-12 flex flex-wrap items-center gap-6">
         <SubmitButton>Submit parts request</SubmitButton>
         {wa ? (
           <p className="text-[0.9375rem] text-ink">

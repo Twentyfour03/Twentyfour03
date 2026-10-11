@@ -37,9 +37,9 @@
   /* Two clusters, a chasm between them. Nothing lives in the middle.
      The display ceiling is set by the hero's longest authored line,
      "delivering with confidence.", which must hold on one line. */
-  --text-display: clamp(2.75rem, 6.6vw, 4.25rem);
-  --text-section: clamp(2.125rem, 5.8vw, 4rem);
-  --text-lot: clamp(1.5rem, 2.8vw, 2.125rem);
+  --text-display: clamp(2rem, 6.6vw, 4.25rem);
+  --text-section: clamp(1.5rem, 5.8vw, 4rem);
+  --text-lot: clamp(1.25rem, 2.8vw, 2.125rem);
   --text-body: 1.0625rem;
   --text-copy: 1.0625rem;
   --text-micro: 0.75rem;
@@ -688,4 +688,15 @@
 .invite-script { font-family: var(--font-script); font-weight: 400; line-height: 1; text-transform: none; }
 @media (prefers-reduced-motion: reduce) {
   .welcome[open] { animation: none; }
+}
+
+/* ------------------------------------------------------------------
+   Phone density. Below 640px the running text steps down one size so
+   a paragraph is not a screenful. Unlayered, so it outranks utilities.
+------------------------------------------------------------------ */
+@media (max-width: 639px) {
+  :root { --text-body: 1rem; --text-copy: 1rem; }
+  .text-\[1\.0625rem\], .text-\[1\.125rem\] { font-size: 1rem; }
+  .text-\[1rem\] { font-size: 0.9375rem; }
+  .pill { padding: 0.55rem 1rem; }
 }

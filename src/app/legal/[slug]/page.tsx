@@ -41,7 +41,7 @@ export default async function LegalPage({ params }: PageProps<"/legal/[slug]">) 
   if (!page) notFound();
 
   return (
-    <section className="mx-auto max-w-[900px] px-5 py-20 sm:px-8 lg:py-28">
+    <section className="mx-auto max-w-[900px] px-5 py-12 sm:py-20 sm:px-8 lg:py-28">
       <h1 className="display display-xl">{page.title}.</h1>
       <div className="prose-legal mt-10 space-y-5 text-[1.0625rem] text-ink">
         {page.body ? (

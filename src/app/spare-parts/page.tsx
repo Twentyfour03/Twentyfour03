@@ -48,7 +48,7 @@ export default async function SparePartsPage() {
     <>
       {/* The away colorway. Same catalogue, different buyer. */}
       <section className="ground bg-cream-sheet text-ink">
-        <div className="mx-auto max-w-[1400px] px-5 pt-16 pb-16 sm:px-8 lg:px-12 lg:pt-24">
+        <div className="mx-auto max-w-[1400px] px-5 pt-10 sm:pt-16 pb-10 sm:pb-16 sm:px-8 lg:px-12 lg:pt-24">
           <Press as="h1" className="display display-xl max-w-[15ch]">
             Car spare parts, China to Ghana.
           </Press>
@@ -67,15 +67,15 @@ export default async function SparePartsPage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
+      <section className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-24">
         <div className="grid gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)] lg:gap-20">
           <div>
             <Press as="h2" className="display display-lg">What we source.</Press>
-            <ul className="mt-10 grid gap-x-10 sm:grid-cols-2">
+            <ul className="mt-10 grid grid-cols-2 gap-x-5 sm:gap-x-10">
               {partTypes.map((part) => (
                 <li
                   key={part}
-                  className="rule-hair py-4 text-[1.0625rem] text-ink"
+                  className="rule-hair py-3 text-[0.9375rem] text-ink sm:py-4 sm:text-[1.0625rem]"
                 >
                   {part}
                 </li>
@@ -102,9 +102,9 @@ export default async function SparePartsPage() {
       </section>
 
       <section className="ground bg-cream-sheet text-ink">
-        <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:px-12 lg:py-24">
+        <div className="mx-auto max-w-[1400px] px-5 py-12 sm:py-20 sm:px-8 lg:px-12 lg:py-24">
           <Press as="h2" className="display display-lg">How we protect the order.</Press>
-          <div className="mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
+          <div className="mt-8 sm:mt-12 grid gap-x-12 gap-y-10 sm:grid-cols-2">
             {assurances.map((item) => (
               <div key={item.title}>
                 <h3 className="display display-sm">{item.title}</h3>
@@ -119,7 +119,7 @@ export default async function SparePartsPage() {
 
       <section
         id="request"
-        className="mx-auto max-w-[900px] scroll-mt-24 px-5 py-20 sm:px-8 lg:py-28"
+        className="mx-auto max-w-[900px] scroll-mt-24 px-5 py-12 sm:py-20 sm:px-8 lg:py-28"
       >
         <Press as="h2" className="display display-lg">Request a part.</Press>
         <p className="prose-measure mt-5 text-[1.0625rem] text-ink">
@@ -130,7 +130,7 @@ export default async function SparePartsPage() {
       </section>
 
       {faqs.length > 0 ? (
-        <section className="mx-auto max-w-[1400px] px-5 pb-24 sm:px-8 lg:px-12">
+        <section className="mx-auto max-w-[1400px] px-5 pb-12 sm:pb-24 sm:px-8 lg:px-12">
           <Press as="h2" className="display display-lg">
             Questions we are asked.
           </Press>
