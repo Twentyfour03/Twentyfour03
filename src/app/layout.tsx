@@ -46,13 +46,35 @@ const jost = Jost({
   weight: ["300", "400", "500", "700", "800"],
 });
 
+const SITE_URL = "https://www.twentyfour03vintage.org";
+const DESCRIPTION =
+  "A procurement and sourcing agency connecting individuals and businesses in Ghana to products and suppliers across China, the UAE, the UK and Europe.";
+
 export const metadata: Metadata = {
+  // Makes the icon and share-image addresses absolute, which link previews
+  // in WhatsApp, iMessage and social apps require.
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "TwentyFour03 Vintage — Global Procurement & Sourcing Agency",
     template: "%s · TwentyFour03 Vintage",
   },
-  description:
-    "A procurement and sourcing agency connecting individuals and businesses in Ghana to products and suppliers across China, the UAE, the UK and Europe.",
+  description: DESCRIPTION,
+  applicationName: "TwentyFour03 Vintage",
+  // The icons and the share image are the files beside this one:
+  // favicon.ico, icon.png, apple-icon.png and opengraph-image.png.
+  openGraph: {
+    type: "website",
+    siteName: "TwentyFour03 Vintage",
+    title: "TwentyFour03 Vintage — Global Procurement & Sourcing Agency",
+    description: DESCRIPTION,
+    url: SITE_URL,
+    locale: "en_GH",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TwentyFour03 Vintage — Global Procurement & Sourcing Agency",
+    description: DESCRIPTION,
+  },
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
